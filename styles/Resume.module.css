@@ -1,0 +1,141 @@
+.container {
+    font-family: 'Lato', sans-serif;
+    font-size: 20.5px;
+    --primary: #00004c;
+
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    width: 100%;
+    border: 1px solid grey;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2.5em;
+}
+
+.headerTitle {
+    font-family: 'Raleway', sans-serif;
+    display: flex;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding-top: 0.75em;
+    padding-right: 0.75em;
+    flex: 0 0 200px;
+}
+
+.headerContent {
+    display: flex;
+    flex: 1;
+}
+
+.headerContentDesc {
+    flex: 1;
+}
+
+.headerContentImage {
+    width: 200px;
+    height: auto;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+/*  */
+
+.section {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 2.5em;
+}
+
+.section .side {
+    position: relative;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.2em;
+    padding-top: 0.75em;
+    padding-right: 0.75em;
+    flex: 0 0 200px;
+    /* color: #00004c; */
+    color: var(--primary);
+}
+
+.section .side:after {
+    content: '';
+    width: 25px;
+    height: 2px;
+    background: #000;
+    position: absolute;
+    top: -2px;
+    left: 0;
+    display: block;
+}
+
+.section .content {
+    padding-top: 0.75em;
+    width: 100%;
+    border-top: 4px solid var(--primary);
+}
+
+.section .content p:first-child {
+    margin-top: 0;
+}
+
+.section .content p:last-child {
+    margin-bottom: 0;
+}
+
+.section .content ul {
+    margin: 0;
+}
+
+.qualification {
+    margin-bottom: 1.5em;
+}
+
+.qualification:last-of-type {
+    margin-bottom: 0;
+}
+
+.qualification-title {
+    padding-bottom: 0.1em;
+}
+
+.qualification-date {
+    margin-bottom: 0.7em;
+    font-weight: lighter;
+    font-size: 1em;
+    color: #333;
+}
+
+.qualification-content {
+}
+
+.section.heading .side {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.references {
+    display: flex;
+    width: 100%;
+}
+
+.references .referee {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.content .points {
+    display: block;
+    padding-bottom: 0.3em;
+}
+
+.disclaimer .signature {
+    display: flex;
+}
+
+.disclaimer .signature div {
+    flex: 1;
+}
