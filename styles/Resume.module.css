@@ -49,7 +49,7 @@
     margin-bottom: 2.5em;
 }
 
-.section .side {
+.sectionSide {
     position: relative;
     font-family: 'Raleway', sans-serif;
     font-size: 1.2em;
@@ -71,7 +71,7 @@
     display: block;
 }
 
-.section .content {
+.sectionContent {
     padding-top: 0.75em;
     width: 100%;
     border-top: 4px solid var(--primary);
