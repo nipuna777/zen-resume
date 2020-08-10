@@ -2,6 +2,7 @@ import styles from '../styles/Resume.module.css';
 import { useForm, Controller } from 'react-hook-form';
 import TextInput from '../components/text-input';
 import TextAreaInput from '../components/text-area-input';
+import { Image, Transformation } from 'cloudinary-react';
 
 let ReactQuill;
 if (typeof window !== 'undefined') {
@@ -37,6 +38,31 @@ export default function Resume() {
             <form style={{ width: 555, margin: 10 }}>
                 <TextInput label="Title" inputRef={register} name="title" />
                 <TextInput label="Image URL" inputRef={register} name="imageUrl" />
+                <input
+                    type="file"
+                    name="profile-image"
+                    onChange={(event) => {
+                        console.log(event.target.files[0]);
+                        let selectedFile = event.target.files[0];
+
+                        var data = new FormData();
+                        data.append('file', selectedFile);
+                        data.append('upload_preset', 'smkrczl7');
+
+                        fetch('https://api.cloudinary.com/v1_1/dtmkcgalp/upload', {
+                            method: 'POST',
+                            headers: new Headers({ 'content-type': 'application/x-www-form-urlencoded' }),
+                            body: data,
+                        })
+                            .then((res) => {
+                                console.log(res);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    }}
+                />
+
                 <TextInput label="Email" inputRef={register} name="telephone" />
                 <TextInput label="Telephone" inputRef={register} name="email" />
                 <TextAreaInput label="Address" inputRef={register} name="address" />
@@ -69,6 +95,9 @@ export default function Resume() {
                                 {email}
                             </a>
                         </div>
+                        <Image className={styles.headerContentImage} publicId="screenshot">
+                            <Transformation width="200" height="200" gravity="faces" crop="fill" />
+                        </Image>
                         <img className={styles.headerContentImage} src={imageUrl} alt="profile photo" />
                     </div>
                 </header>
