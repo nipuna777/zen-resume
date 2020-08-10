@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import TextInput from '../components/text-input';
 import TextAreaInput from '../components/text-area-input';
 import { Image, Transformation } from 'cloudinary-react';
+import { useState } from 'react';
 
 let ReactQuill;
 if (typeof window !== 'undefined') {
@@ -29,6 +30,7 @@ export default function Resume() {
                 'To excel as a professional, in the fields of Accountancy and financial management while delivering best service possible in achieving organizational objectives.',
         },
     });
+    const [profileImagePublicId, setProfileImagePublicId] = useState('sample');
     const sections = [0, 1];
 
     const fieldValues = watch();
@@ -51,11 +53,12 @@ export default function Resume() {
 
                         fetch('https://api.cloudinary.com/v1_1/dtmkcgalp/upload', {
                             method: 'POST',
-                            headers: new Headers({ 'content-type': 'application/x-www-form-urlencoded' }),
                             body: data,
                         })
+                            .then((res) => res.json())
                             .then((res) => {
-                                console.log(res);
+                                console.log(res.public_id);
+                                setProfileImagePublicId(res.public_id);
                             })
                             .catch((error) => {
                                 console.error(error);
@@ -95,10 +98,9 @@ export default function Resume() {
                                 {email}
                             </a>
                         </div>
-                        <Image className={styles.headerContentImage} publicId="screenshot">
+                        <Image className={styles.headerContentImage} publicId={profileImagePublicId}>
                             <Transformation width="200" height="200" gravity="faces" crop="fill" />
                         </Image>
-                        <img className={styles.headerContentImage} src={imageUrl} alt="profile photo" />
                     </div>
                 </header>
                 {sections.map((section, i) => {
