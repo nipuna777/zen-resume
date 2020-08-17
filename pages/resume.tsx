@@ -39,10 +39,13 @@ export default function Resume() {
         <div style={{ display: 'flex', flexDirection: 'row' }}>
             <form style={{ width: 555, margin: 10 }}>
                 <TextInput label="Title" inputRef={register} name="title" />
-                <TextInput label="Image URL" inputRef={register} name="imageUrl" />
+                <label style={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: 10 }}>
+                    Select Image (Maximum 10mb)
+                </label>
                 <input
                     type="file"
                     name="profile-image"
+                    accept="image/*"
                     onChange={(event) => {
                         console.log(event.target.files[0]);
                         let selectedFile = event.target.files[0];
@@ -57,11 +60,19 @@ export default function Resume() {
                         })
                             .then((res) => res.json())
                             .then((res) => {
-                                console.log(res.public_id);
-                                setProfileImagePublicId(res.public_id);
+                                if (res.error) {
+                                    console.error(res.error);
+                                    const message = res.error.message || 'Error uploading image';
+                                    alert(message);
+                                } else {
+                                    console.log(res.public_id);
+                                    setProfileImagePublicId(res.public_id);
+                                }
                             })
                             .catch((error) => {
                                 console.error(error);
+                                const message = error.message || 'Error uploading image';
+                                alert(message);
                             });
                     }}
                 />
