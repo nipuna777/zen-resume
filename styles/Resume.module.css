@@ -7,7 +7,6 @@
     flex-direction: column;
     padding: 2em;
     width: 100%;
-    border: 1px solid grey;
 }
 
 .header {
@@ -24,6 +23,7 @@
     padding-top: 0.75em;
     padding-right: 0.75em;
     flex: 0 0 200px;
+    font-size: 24px;
 }
 
 .headerContent {
