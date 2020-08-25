@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "@fullhuman/postcss-purgecss": "^2.3.0",
+        "@svgr/webpack": "^5.4.0",
         "autoprefixer": "^9.8.6",
         "cloudinary-react": "^1.6.6",
         "markdown-to-jsx": "^6.11.4",
