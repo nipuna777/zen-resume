@@ -3,8 +3,9 @@ import { useForm, Controller } from 'react-hook-form';
 import TextInput from '../components/text-input';
 import TextAreaInput from '../components/text-area-input';
 import { Image, Transformation } from 'cloudinary-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LoadingSVG from '../public/images/loading.svg';
+import firebase from 'firebase';
 
 let ReactQuill;
 if (typeof window !== 'undefined') {
@@ -19,8 +20,29 @@ export async function getStaticProps(context) {
     };
 }
 
+const useFirebaseAuthentication = (firebase) => {
+    const [authUser, setAuthUser] = useState(null);
+
+    useEffect(() => {
+        const unlisten = firebase.auth().onAuthStateChanged(
+            authUser => {
+                authUser
+                    ? setAuthUser(authUser)
+                    : setAuthUser(null);
+            },
+        );
+        return () => {
+            unlisten();
+        }
+    });
+
+    return authUser
+}
+
+const db = firebase.firestore();
+
 export default function Resume() {
-    const { control, register, watch } = useForm<any>({
+    const { control, register, watch, setValue } = useForm<any>({
         defaultValues: {
             title: 'Nipuna Gunathilake',
             telephone: '+65123456789',
@@ -36,6 +58,20 @@ export default function Resume() {
     const sections = [0, 1];
 
     const fieldValues = watch();
+
+    const user = useFirebaseAuthentication(firebase);
+    useEffect(() => {
+        if (user && user.uid) {
+            db.collection("resumes").doc(user.uid).get().then((doc) => {
+                const resume = doc.data();
+                Object.keys(resume).forEach((key) => {
+                    setValue(key, resume[key])
+                })
+            })
+        }
+    }, [user])
+
+
     const { title, telephone, email, address, imageUrl } = fieldValues;
     return (
         <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -119,6 +155,15 @@ export default function Resume() {
                         </div>
                     );
                 })}
+                <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={(event) => {
+                        event.preventDefault();
+
+                        db.collection("resumes").doc(user.uid).set({ ...fieldValues })
+                    }}>
+                    Save
+                </button>
             </form>
             <div className="flex flex-col w-full p-8 border-l-2 border-gray-300">
                 <header className={styles.header}>
