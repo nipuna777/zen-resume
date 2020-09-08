@@ -5,6 +5,7 @@ import TextAreaInput from '../components/text-area-input';
 import { Image, Transformation } from 'cloudinary-react';
 import { useState, useEffect } from 'react';
 import LoadingSVG from '../public/images/loading.svg';
+import useFirebaseAuthentication from '../hooks/auth';
 import firebase from 'firebase';
 
 let ReactQuill;
@@ -18,25 +19,6 @@ export async function getStaticProps(context) {
             title: 'Nipuna Gunathilake',
         },
     };
-}
-
-const useFirebaseAuthentication = (firebase) => {
-    const [authUser, setAuthUser] = useState(null);
-
-    useEffect(() => {
-        const unlisten = firebase.auth().onAuthStateChanged(
-            authUser => {
-                authUser
-                    ? setAuthUser(authUser)
-                    : setAuthUser(null);
-            },
-        );
-        return () => {
-            unlisten();
-        }
-    });
-
-    return authUser
 }
 
 const db = firebase.firestore();
@@ -59,18 +41,20 @@ export default function Resume() {
 
     const fieldValues = watch();
 
-    const user = useFirebaseAuthentication(firebase);
+    const user = useFirebaseAuthentication();
     useEffect(() => {
         if (user && user.uid) {
-            db.collection("resumes").doc(user.uid).get().then((doc) => {
-                const resume = doc.data();
-                Object.keys(resume).forEach((key) => {
-                    setValue(key, resume[key])
-                })
-            })
+            db.collection('resumes')
+                .doc(user.uid)
+                .get()
+                .then((doc) => {
+                    const resume = doc.data();
+                    Object.keys(resume).forEach((key) => {
+                        setValue(key, resume[key]);
+                    });
+                });
         }
-    }, [user])
-
+    }, [user]);
 
     const { title, telephone, email, address, imageUrl } = fieldValues;
     return (
@@ -160,8 +144,11 @@ export default function Resume() {
                     onClick={(event) => {
                         event.preventDefault();
 
-                        db.collection("resumes").doc(user.uid).set({ ...fieldValues })
-                    }}>
+                        db.collection('resumes')
+                            .doc(user.uid)
+                            .set({ ...fieldValues });
+                    }}
+                >
                     Save
                 </button>
             </form>

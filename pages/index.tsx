@@ -1,8 +1,11 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
+import useFirebaseAuthentication from '../hooks/auth';
 
 export default function Home() {
+    const user = useFirebaseAuthentication();
+
     return (
         <div className={styles.container}>
             <Head>
@@ -16,11 +19,19 @@ export default function Home() {
                 <p className={styles.description}>Create and edit resume online</p>
 
                 <div className={styles.grid}>
-                    <Link href="/resume">
-                        <a>
-                            <h3>Create &rarr;</h3>
-                        </a>
-                    </Link>
+                    {!user ? (
+                        <Link href="/login">
+                            <a>
+                                <h3>Login to create resume &rarr;</h3>
+                            </a>
+                        </Link>
+                    ) : (
+                        <Link href="/resume">
+                            <a>
+                                <h3>Continue editing resume &rarr;</h3>
+                            </a>
+                        </Link>
+                    )}
                 </div>
             </main>
 
