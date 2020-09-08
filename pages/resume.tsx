@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import LoadingSVG from '../public/images/loading.svg';
 import useFirebaseAuthentication from '../hooks/auth';
 import firebase from 'firebase';
+import { useToasts } from 'react-toast-notifications';
 
 let ReactQuill;
 if (typeof window !== 'undefined') {
@@ -24,18 +25,18 @@ export async function getStaticProps(context) {
 const db = firebase.firestore();
 
 export default function Resume() {
+    const { addToast } = useToasts();
     const { control, register, watch, setValue } = useForm<any>({
         defaultValues: {
             title: 'Nipuna Gunathilake',
             telephone: '+65123456789',
             email: 'nipuna777@gmail.com',
             address: 'Ruwan\nPittiyegedara',
-            imageUrl: 'https://nipuna777.com/static/7fff478813639d31c953af6a47d57c9b/6e63d/nipuna-profile.jpg',
+            imageId: 'placeholder-profile_ubymfr',
             value:
                 'To excel as a professional, in the fields of Accountancy and financial management while delivering best service possible in achieving organizational objectives.',
         },
     });
-    const [profileImagePublicId, setProfileImagePublicId] = useState('placeholder-profile_ubymfr');
     const [isLoading, setIsLoading] = useState(false);
     const sections = [0, 1];
 
@@ -43,6 +44,8 @@ export default function Resume() {
 
     const user = useFirebaseAuthentication();
     useEffect(() => {
+        setIsLoading(false);
+
         if (user && user.uid) {
             db.collection('resumes')
                 .doc(user.uid)
@@ -52,11 +55,14 @@ export default function Resume() {
                     Object.keys(resume).forEach((key) => {
                         setValue(key, resume[key]);
                     });
+                })
+                .finally(() => {
+                    setIsLoading(false);
                 });
         }
     }, [user]);
 
-    const { title, telephone, email, address, imageUrl } = fieldValues;
+    const { title, telephone, email, address, imageId } = fieldValues;
     return (
         <div style={{ display: 'flex', flexDirection: 'row' }}>
             {isLoading && (
@@ -99,16 +105,17 @@ export default function Resume() {
                                     if (res.error) {
                                         console.error(res.error);
                                         const message = res.error.message || 'Error uploading image';
-                                        alert(message);
+                                        addToast(message, { appearance: 'error' });
                                     } else {
                                         console.log(res.public_id);
-                                        setProfileImagePublicId(res.public_id);
+                                        setValue('imageId', res.public_id);
+                                        addToast('Uploaded image succesfully', { appearance: 'success' });
                                     }
                                 })
                                 .catch((error) => {
                                     console.error(error);
                                     const message = error.message || 'Error uploading image';
-                                    alert(message);
+                                    addToast(message, { appearance: 'error' });
                                 })
                                 .finally(() => {
                                     setIsLoading(false);
@@ -117,8 +124,10 @@ export default function Resume() {
                     />
                 </div>
 
-                <TextInput label="Email" inputRef={register} name="telephone" />
-                <TextInput label="Telephone" inputRef={register} name="email" />
+                <TextInput label="Image ID" inputRef={register} name="imageId" hidden />
+
+                <TextInput label="Email" inputRef={register} name="email" />
+                <TextInput label="Telephone" inputRef={register} name="telephone" />
                 <TextAreaInput label="Address" inputRef={register} name="address" />
 
                 {sections.map((section, i) => {
@@ -143,10 +152,20 @@ export default function Resume() {
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={(event) => {
                         event.preventDefault();
+                        setIsLoading(true);
 
                         db.collection('resumes')
                             .doc(user.uid)
-                            .set({ ...fieldValues });
+                            .set({ ...fieldValues })
+                            .then(() => {
+                                addToast('Saved changes successfully', { appearance: 'success' });
+                            })
+                            .catch(() => {
+                                addToast('Error saving changes', { appearance: 'error' });
+                            })
+                            .finally(() => {
+                                setIsLoading(false);
+                            });
                     }}
                 >
                     Save
@@ -164,7 +183,7 @@ export default function Resume() {
                                 {email}
                             </a>
                         </div>
-                        <Image className={styles.headerContentImage} publicId={profileImagePublicId}>
+                        <Image className={styles.headerContentImage} publicId={imageId}>
                             <Transformation width="200" height="200" gravity="faces" crop="fill" />
                         </Image>
                     </div>
