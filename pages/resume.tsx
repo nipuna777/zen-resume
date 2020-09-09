@@ -132,20 +132,23 @@ export default function Resume() {
 
                 {sections.map((section, i) => {
                     return (
-                        <div className="mb-4 mt-4">
-                            <TextInput label={`Section ${i} title`} inputRef={register} name={`sectionTitle${i}`} />
-                            {ReactQuill ? (
-                                <label className="block text-gray-700 text-sm font-bold mb-2">
-                                    Section {i}
-                                    <Controller
-                                        as={ReactQuill}
-                                        name={`sectionValue${i}`}
-                                        control={control}
-                                        defaultValue=""
-                                    />
-                                </label>
-                            ) : null}
-                        </div>
+                        <>
+                            <hr />
+                            <div className="mb-4 mt-4">
+                                <TextInput label={`Section ${i} title`} inputRef={register} name={`sectionTitle${i}`} />
+                                {ReactQuill ? (
+                                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                                        Section {i}
+                                        <Controller
+                                            as={ReactQuill}
+                                            name={`sectionValue${i}`}
+                                            control={control}
+                                            defaultValue=""
+                                        />
+                                    </label>
+                                ) : null}
+                            </div>
+                        </>
                     );
                 })}
                 <button
@@ -176,12 +179,12 @@ export default function Resume() {
                     <h1 className={styles.headerTitle}>{title}</h1>
                     <div className={styles.headerContent}>
                         <div className={styles.headerContentDesc}>
-                            <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
-                            <strong>{telephone}</strong>
-                            <br />
                             <a className={styles.email} href={`mailto: ${email}`}>
                                 {email}
                             </a>
+                            <br />
+                            <strong>{telephone}</strong>
+                            <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
                         </div>
                         <Image className={styles.headerContentImage} publicId={imageId}>
                             <Transformation width="200" height="200" gravity="faces" crop="fill" />
