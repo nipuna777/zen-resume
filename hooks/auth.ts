@@ -1,23 +1,40 @@
 import { useState, useEffect } from 'react';
 import firebase from 'firebase';
+import { useToasts } from 'react-toast-notifications';
+import { useRouter } from 'next/router';
 
 const useFirebaseAuthentication = () => {
     const [authUser, setAuthUser] = useState(null);
+    const { addToast } = useToasts();
+    const router = useRouter();
 
     useEffect(() => {
-        const unlisten = firebase.auth().onAuthStateChanged(
-            authUser => {
-                authUser
-                    ? setAuthUser(authUser)
-                    : setAuthUser(null);
-            },
-        );
+        const unlisten = firebase.auth().onAuthStateChanged((authUser) => {
+            authUser ? setAuthUser(authUser) : setAuthUser(null);
+        });
         return () => {
             unlisten();
-        }
+        };
     });
 
-    return authUser
-}
+    const logout = () => {
+        firebase
+            .auth()
+            .signOut()
+            .then(
+                function () {
+                    addToast('Logout succesful', { appearance: 'success' });
+                },
+                function (error) {
+                    addToast(error, { appearance: 'error' });
+                }
+            )
+            .finally(() => {
+                router.push('/login');
+            });
+    };
 
-export default useFirebaseAuthentication
+    return { logout, authUser };
+};
+
+export default useFirebaseAuthentication;

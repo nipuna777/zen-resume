@@ -3,6 +3,7 @@ import 'react-quill/dist/quill.snow.css';
 import { CloudinaryContext } from 'cloudinary-react';
 import firebase from 'firebase';
 import { ToastProvider } from 'react-toast-notifications';
+import NavBar from '../components/nav-bar';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyA1AeYQBOthvnL5BAYS6K0HsHuDj1Dnw2w',
@@ -23,6 +24,7 @@ function MyApp({ Component, pageProps }) {
     return (
         <ToastProvider autoDismiss={true}>
             <CloudinaryContext cloudName="dtmkcgalp">
+                <NavBar />
                 <Component {...pageProps} />
             </CloudinaryContext>
         </ToastProvider>

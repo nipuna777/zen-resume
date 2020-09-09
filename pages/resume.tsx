@@ -42,13 +42,13 @@ export default function Resume() {
 
     const fieldValues = watch();
 
-    const user = useFirebaseAuthentication();
+    const { authUser } = useFirebaseAuthentication();
     useEffect(() => {
         setIsLoading(false);
 
-        if (user && user.uid) {
+        if (authUser && authUser.uid) {
             db.collection('resumes')
-                .doc(user.uid)
+                .doc(authUser.uid)
                 .get()
                 .then((doc) => {
                     const resume = doc.data();
@@ -60,21 +60,17 @@ export default function Resume() {
                     setIsLoading(false);
                 });
         }
-    }, [user]);
+    }, [authUser]);
 
     const { title, telephone, email, address, imageId } = fieldValues;
     return (
         <div style={{ display: 'flex', flexDirection: 'row' }}>
             {isLoading && (
-                <div className="flex absolute bottom-0 left-0 bg-gray-500 bg-opacity-25 w-screen h-screen">
+                <div className="flex absolute bottom-0 left-0 bg-gray-500 bg-opacity-25 w-screen">
                     <LoadingSVG />
                 </div>
             )}
-            <form className="p-5 h-screen overflow-y-auto overflow-x-hidden bg-gray-200 bg-opacity-25">
-                <h1 className="text-2xl">Zen Resume</h1>
-                <p className="text-xs">Edit your resume by changing settings below</p>
-                <hr className="mb-5 mt-5" />
-
+            <form className="p-5 overflow-y-auto overflow-x-hidden bg-gray-200 bg-opacity-25">
                 <TextInput label="Title" inputRef={register} name="title" />
 
                 <div className="mb-5">
@@ -158,7 +154,7 @@ export default function Resume() {
                         setIsLoading(true);
 
                         db.collection('resumes')
-                            .doc(user.uid)
+                            .doc(authUser.uid)
                             .set({ ...fieldValues })
                             .then(() => {
                                 addToast('Saved changes successfully', { appearance: 'success' });

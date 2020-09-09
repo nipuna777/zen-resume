@@ -4,7 +4,7 @@ import Link from 'next/link';
 import useFirebaseAuthentication from '../hooks/auth';
 
 export default function Home() {
-    const user = useFirebaseAuthentication();
+    const { authUser } = useFirebaseAuthentication();
 
     return (
         <div className={styles.container}>
@@ -19,7 +19,7 @@ export default function Home() {
                 <p className={styles.description}>Create and edit resume online</p>
 
                 <div className={styles.grid}>
-                    {!user ? (
+                    {!authUser ? (
                         <Link href="/login">
                             <a>
                                 <h3>Login to create resume &rarr;</h3>
