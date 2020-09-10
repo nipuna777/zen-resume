@@ -10,13 +10,13 @@ const uiConfig = {
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: '/resume',
     // We will display Google and Facebook as auth providers.
-    signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    ]
+    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
 };
 
 export default function Login() {
-    return <>
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
-    </>
+    return (
+        <>
+            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+        </>
+    );
 }
