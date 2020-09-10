@@ -24,8 +24,10 @@ function MyApp({ Component, pageProps }) {
     return (
         <ToastProvider autoDismiss={true}>
             <CloudinaryContext cloudName="dtmkcgalp">
-                <NavBar />
-                <Component {...pageProps} />
+                <div className="h-screen flex flex-col">
+                    <NavBar />
+                    <Component {...pageProps} />
+                </div>
             </CloudinaryContext>
         </ToastProvider>
     );
