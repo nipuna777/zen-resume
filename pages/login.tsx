@@ -8,13 +8,9 @@ const uiConfig = {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'popup',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: '/resume',
+    signInSuccessUrl: 'https://zen-resume.firebaseapp.com/__/auth/handler',
     // We will display Google and Facebook as auth providers.
-    signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    ],
+    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.EmailAuthProvider.PROVIDER_ID],
 };
 
 export default function Login() {
