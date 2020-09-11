@@ -14,27 +14,18 @@ if (typeof window !== 'undefined') {
     ReactQuill = require('react-quill');
 }
 
-export async function getStaticProps(context) {
-    return {
-        props: {
-            title: 'Nipuna Gunathilake',
-        },
-    };
-}
-
 const db = firebase.firestore();
 
 export default function Resume() {
     const { addToast } = useToasts();
     const { control, register, watch, setValue } = useForm<any>({
         defaultValues: {
-            title: 'Nipuna Gunathilake',
-            telephone: '+65123456789',
-            email: 'nipuna777@gmail.com',
-            address: 'Ruwan\nPittiyegedara',
+            title: 'Foo Bar (Software Engineer)',
+            telephone: '+12345678',
+            email: 'foo.bar@email.com',
+            address: '',
             imageId: 'placeholder-profile_ubymfr',
-            value:
-                'To excel as a professional, in the fields of Accountancy and financial management while delivering best service possible in achieving organizational objectives.',
+            value: '',
         },
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +35,7 @@ export default function Resume() {
 
     const { authUser } = useFirebaseAuthentication();
     useEffect(() => {
-        setIsLoading(false);
+        setIsLoading(true);
 
         if (authUser && authUser.uid) {
             db.collection('resumes')
@@ -66,7 +57,7 @@ export default function Resume() {
     return (
         <div className="flex flex-row flex-grow overflow overflow-hidden">
             {isLoading && (
-                <div className="flex absolute bottom-0 left-0 bg-gray-500 bg-opacity-25 w-screen">
+                <div className="flex absolute top-0 left-0 bg-gray-500 bg-opacity-25 h-screen w-screen">
                     <LoadingSVG />
                 </div>
             )}
@@ -181,37 +172,39 @@ export default function Resume() {
                     })}
                 </div>
             </form>
-            <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300">
-                <div className="bg-white p-8 m-6 max-w-6xl self-center">
-                    <header className={styles.header}>
-                        <h1 className={styles.headerTitle}>{title}</h1>
-                        <div className={styles.headerContent}>
-                            <div className={styles.headerContentDesc}>
-                                <a className={styles.email} href={`mailto: ${email}`}>
-                                    {email}
-                                </a>
-                                <br />
-                                <strong>{telephone}</strong>
-                                <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
+            {!isLoading && (
+                <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300">
+                    <div className="bg-white p-8 m-6 max-w-6xl self-center">
+                        <header className={styles.header}>
+                            <h1 className={styles.headerTitle}>{title}</h1>
+                            <div className={styles.headerContent}>
+                                <div className={styles.headerContentDesc}>
+                                    <a className={styles.email} href={`mailto: ${email}`}>
+                                        {email}
+                                    </a>
+                                    <br />
+                                    <strong>{telephone}</strong>
+                                    <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
+                                </div>
+                                <Image className={styles.headerContentImage} publicId={imageId}>
+                                    <Transformation width="200" height="200" gravity="faces" crop="fill" />
+                                </Image>
                             </div>
-                            <Image className={styles.headerContentImage} publicId={imageId}>
-                                <Transformation width="200" height="200" gravity="faces" crop="fill" />
-                            </Image>
-                        </div>
-                    </header>
-                    {sections.map((section, i) => {
-                        return (
-                            <section className={styles.section}>
-                                <div className={styles.sectionSide}>{fieldValues[`sectionTitle${i}`]}</div>
-                                <div
-                                    className={styles.sectionContent}
-                                    dangerouslySetInnerHTML={{ __html: fieldValues[`sectionValue${i}`] }}
-                                />
-                            </section>
-                        );
-                    })}
+                        </header>
+                        {sections.map((section, i) => {
+                            return (
+                                <section className={styles.section}>
+                                    <div className={styles.sectionSide}>{fieldValues[`sectionTitle${i}`]}</div>
+                                    <div
+                                        className={styles.sectionContent}
+                                        dangerouslySetInnerHTML={{ __html: fieldValues[`sectionValue${i}`] }}
+                                    />
+                                </section>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
