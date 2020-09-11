@@ -43,6 +43,8 @@ export default function Resume() {
                 .get()
                 .then((doc) => {
                     const resume = doc.data();
+                    if (!resume) return;
+
                     Object.keys(resume).forEach((key) => {
                         setValue(key, resume[key]);
                     });
