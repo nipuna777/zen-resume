@@ -3,7 +3,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import TextInput from '../components/text-input';
 import TextAreaInput from '../components/text-area-input';
 import { Image, Transformation } from 'cloudinary-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import LoadingSVG from '../public/images/loading.svg';
 import useFirebaseAuthentication from '../hooks/auth';
 import firebase from 'firebase';
@@ -15,6 +15,8 @@ if (typeof window !== 'undefined') {
     ReactQuill = require('react-quill');
 }
 
+const placeHolderImageId = 'placeholder-profile_ubymfr';
+
 const db = firebase.firestore();
 
 export default function Resume() {
@@ -25,7 +27,7 @@ export default function Resume() {
             telephone: '+12345678',
             email: 'foo.bar@email.com',
             address: '',
-            imageId: 'placeholder-profile_ubymfr',
+            imageId: placeHolderImageId,
             value: '',
         },
     });
@@ -34,6 +36,7 @@ export default function Resume() {
         control,
         name: 'sections',
     });
+    const uploadRef = useRef(null);
 
     const fieldValues = watch();
 
@@ -102,49 +105,72 @@ export default function Resume() {
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             Select Image (Maximum 10mb)
                         </label>
-                        <input
-                            type="file"
-                            name="profile-image"
-                            accept="image/*"
-                            onChange={(event) => {
-                                let selectedFile = event.target.files[0];
-                                const mbFileSize = event.target.files[0].size / (1024 * 1024);
-                                if (mbFileSize > 10) {
-                                    alert('Image size too large. Must be no larger than 10MB');
-                                    return;
-                                }
+                        <div className={imageId !== placeHolderImageId && 'hidden'}>
+                            <input
+                                type="file"
+                                name="profile-image"
+                                accept="image/*"
+                                ref={uploadRef}
+                                onChange={(event) => {
+                                    let selectedFile = event.target.files[0];
+                                    const mbFileSize = event.target.files[0].size / (1024 * 1024);
+                                    if (mbFileSize > 10) {
+                                        alert('Image size too large. Must be no larger than 10MB');
+                                        return;
+                                    }
 
-                                var data = new FormData();
-                                data.append('file', selectedFile);
-                                data.append('upload_preset', 'smkrczl7');
+                                    var data = new FormData();
+                                    data.append('file', selectedFile);
+                                    data.append('upload_preset', 'smkrczl7');
 
-                                setIsLoading(true);
-                                fetch('https://api.cloudinary.com/v1_1/dtmkcgalp/upload', {
-                                    method: 'POST',
-                                    body: data,
-                                })
-                                    .then((res) => res.json())
-                                    .then((res) => {
-                                        if (res.error) {
-                                            console.error(res.error);
-                                            const message = res.error.message || 'Error uploading image';
+                                    setIsLoading(true);
+                                    fetch('https://api.cloudinary.com/v1_1/dtmkcgalp/upload', {
+                                        method: 'POST',
+                                        body: data,
+                                    })
+                                        .then((res) => res.json())
+                                        .then((res) => {
+                                            if (res.error) {
+                                                console.error(res.error);
+                                                const message = res.error.message || 'Error uploading image';
+                                                addToast(message, { appearance: 'error' });
+                                            } else {
+                                                console.log(res.public_id);
+                                                setValue('imageId', res.public_id);
+                                                addToast('Uploaded image succesfully', { appearance: 'success' });
+                                            }
+                                        })
+                                        .catch((error) => {
+                                            console.error(error);
+                                            const message = error.message || 'Error uploading image';
                                             addToast(message, { appearance: 'error' });
-                                        } else {
-                                            console.log(res.public_id);
-                                            setValue('imageId', res.public_id);
-                                            addToast('Uploaded image succesfully', { appearance: 'success' });
-                                        }
-                                    })
-                                    .catch((error) => {
-                                        console.error(error);
-                                        const message = error.message || 'Error uploading image';
-                                        addToast(message, { appearance: 'error' });
-                                    })
-                                    .finally(() => {
-                                        setIsLoading(false);
-                                    });
-                            }}
-                        />
+                                        })
+                                        .finally(() => {
+                                            setIsLoading(false);
+                                        });
+                                }}
+                            />
+                        </div>
+
+                        <div
+                            className={`flex flex-row align-middle justify-between items-center ${
+                                imageId === placeHolderImageId && 'hidden'
+                            }`}
+                        >
+                            <Image className="w-16" publicId={imageId}>
+                                <Transformation width="200" height="200" gravity="faces" crop="fill" />
+                            </Image>
+                            <button
+                                className="bg-transparent hover:bg-red-300 text-red-400 text-sm hover:text-white p-1 mb-3 border border-red-300 hover:border-transparent rounded"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setValue('imageId', placeHolderImageId);
+                                    uploadRef.current.click();
+                                }}
+                            >
+                                Change image
+                            </button>
+                        </div>
                     </div>
 
                     <TextInput label="Image ID" inputRef={register} name="imageId" hidden />
