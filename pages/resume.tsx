@@ -1,5 +1,5 @@
 import styles from '../styles/Resume.module.css';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import TextInput from '../components/text-input';
 import TextAreaInput from '../components/text-area-input';
 import { Image, Transformation } from 'cloudinary-react';
@@ -8,6 +8,7 @@ import LoadingSVG from '../public/images/loading.svg';
 import useFirebaseAuthentication from '../hooks/auth';
 import firebase from 'firebase';
 import { useToasts } from 'react-toast-notifications';
+import SectionEditor from '../components/section';
 
 let ReactQuill;
 if (typeof window !== 'undefined') {
@@ -29,33 +30,38 @@ export default function Resume() {
         },
     });
     const [isLoading, setIsLoading] = useState(false);
-    const sections = [0, 1];
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'sections',
+    });
 
     const fieldValues = watch();
 
+    const fetchResume = async (authUser) => {
+        setIsLoading(true);
+        const resumeDocPath = db.collection('resumes').doc(authUser.uid);
+
+        try {
+            const resume = await (await resumeDocPath.get()).data();
+            if (!resume) return;
+
+            Object.keys(resume).forEach((key) => {
+                setValue(key, resume[key]);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+        setIsLoading(false);
+    };
+
     const { authUser } = useFirebaseAuthentication();
     useEffect(() => {
-        setIsLoading(true);
-
         if (authUser && authUser.uid) {
-            db.collection('resumes')
-                .doc(authUser.uid)
-                .get()
-                .then((doc) => {
-                    const resume = doc.data();
-                    if (!resume) return;
-
-                    Object.keys(resume).forEach((key) => {
-                        setValue(key, resume[key]);
-                    });
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
+            fetchResume(authUser);
         }
     }, [authUser]);
 
-    const { title, telephone, email, address, imageId } = fieldValues;
+    const { title, telephone, email, address, imageId, sections } = fieldValues;
     return (
         <div className="flex flex-row flex-grow overflow overflow-hidden">
             {isLoading && (
@@ -64,7 +70,7 @@ export default function Resume() {
                 </div>
             )}
             <form className=" flex-col overflow-y-auto overflow-x-hidden bg-gray-200 bg-opacity-25">
-                <div className="flex flex-col p-5 sticky top-0 left-0 bg-gray-300">
+                <div className="flex flex-col p-5 sticky top-0 left-0 bg-gray-300 z-10">
                     <button
                         className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
                         onClick={(event) => {
@@ -147,31 +153,35 @@ export default function Resume() {
                     <TextInput label="Telephone" inputRef={register} name="telephone" />
                     <TextAreaInput label="Address" inputRef={register} name="address" />
 
-                    {sections.map((section, i) => {
-                        return (
-                            <>
-                                <hr />
-                                <div className="mb-4 mt-4">
-                                    <TextInput
-                                        label={`Section ${i} title`}
-                                        inputRef={register}
-                                        name={`sectionTitle${i}`}
-                                    />
-                                    {ReactQuill ? (
-                                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                                            Section {i}
-                                            <Controller
-                                                as={ReactQuill}
-                                                name={`sectionValue${i}`}
-                                                control={control}
-                                                defaultValue=""
-                                            />
-                                        </label>
-                                    ) : null}
-                                </div>
-                            </>
-                        );
-                    })}
+                    {fields.map((section, index) => (
+                        <div key={section.id}>
+                            <SectionEditor index={index} section={section} register={register} control={control} />
+                            <button
+                                className="bg-transparent hover:bg-red-300 text-red-400 text-sm hover:text-white p-1 mb-3 border border-red-300 hover:border-transparent rounded"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    remove(index);
+                                }}
+                            >
+                                Remove Section
+                            </button>
+                        </div>
+                    ))}
+
+                    <div>
+                        <button
+                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                append({
+                                    title: 'Section Title',
+                                    content: 'Add Content',
+                                });
+                            }}
+                        >
+                            + Add Section
+                        </button>
+                    </div>
                 </div>
             </form>
             {!isLoading && (
@@ -193,13 +203,13 @@ export default function Resume() {
                                 </Image>
                             </div>
                         </header>
-                        {sections.map((section, i) => {
+                        {sections?.map((section, index) => {
                             return (
-                                <section className={styles.section}>
-                                    <div className={styles.sectionSide}>{fieldValues[`sectionTitle${i}`]}</div>
+                                <section key={`section.id-${index}`} className={styles.section}>
+                                    <div className={styles.sectionSide}>{section.title}</div>
                                     <div
                                         className={styles.sectionContent}
-                                        dangerouslySetInnerHTML={{ __html: fieldValues[`sectionValue${i}`] }}
+                                        dangerouslySetInnerHTML={{ __html: section.content }}
                                     />
                                 </section>
                             );
