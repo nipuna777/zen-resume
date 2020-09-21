@@ -10,11 +10,6 @@ import firebase from 'firebase';
 import { useToasts } from 'react-toast-notifications';
 import SectionEditor from '../components/section';
 
-let ReactQuill;
-if (typeof window !== 'undefined') {
-    ReactQuill = require('react-quill');
-}
-
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
 const db = firebase.firestore();
@@ -232,7 +227,10 @@ export default function Resume() {
                         {sections?.map((section, index) => {
                             return (
                                 <section key={`section.id-${index}`} className={styles.section}>
-                                    <div className={styles.sectionSide}>{section.title}</div>
+                                    <div className={styles.sectionSide}>
+                                        <p>{section.title}</p>
+                                        <p>{section.subtitle}</p>
+                                    </div>
                                     <div
                                         className={styles.sectionContent}
                                         dangerouslySetInnerHTML={{ __html: section.content }}

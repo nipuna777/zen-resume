@@ -17,15 +17,19 @@ export default function SectionEditor({ section, control, register, index }) {
                     name={`sections[${index}].title`}
                     defaultValue={section.title}
                 />
+                <TextInput
+                    label={`Section subtitle`}
+                    inputRef={register()}
+                    name={`sections[${index}].subtitle`}
+                    defaultValue={section.subtitle}
+                />
                 {ReactQuill ? (
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                        <Controller
-                            as={ReactQuill}
-                            name={`sections[${index}].content`}
-                            control={control}
-                            defaultValue={section.content}
-                        />
-                    </label>
+                    <Controller
+                        as={ReactQuill}
+                        name={`sections[${index}].content`}
+                        control={control}
+                        defaultValue={section.content}
+                    />
                 ) : null}
             </div>
         </>
