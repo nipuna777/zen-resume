@@ -9,6 +9,7 @@ import useFirebaseAuthentication from '../hooks/auth';
 import firebase from 'firebase';
 import { useToasts } from 'react-toast-notifications';
 import SectionEditor from '../components/section';
+import { useReactToPrint } from 'react-to-print';
 
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
@@ -32,6 +33,10 @@ export default function Resume() {
         name: 'sections',
     });
     const uploadRef = useRef(null);
+    const documentRef = useRef(null);
+    const handlePrint = useReactToPrint({
+        content: () => documentRef.current,
+    });
 
     const fieldValues = watch();
 
@@ -68,9 +73,9 @@ export default function Resume() {
                 </div>
             )}
             <form className=" flex-col overflow-y-auto overflow-x-hidden bg-gray-200 bg-opacity-25">
-                <div className="flex flex-col p-5 sticky top-0 left-0 bg-gray-300 z-10">
+                <div className="flex flex-row p-5 sticky top-0 left-0 bg-gray-300 z-10">
                     <button
-                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded flex-1"
                         onClick={(event) => {
                             event.preventDefault();
                             setIsLoading(true);
@@ -90,6 +95,15 @@ export default function Resume() {
                         }}
                     >
                         Save
+                    </button>
+                    <button
+                        className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 ml-2 border border-gray-500 hover:border-transparent rounded"
+                        onClick={(event) => {
+                            event.preventDefault();
+                            handlePrint();
+                        }}
+                    >
+                        Print
                     </button>
                 </div>
 
@@ -207,7 +221,7 @@ export default function Resume() {
             </form>
             {!isLoading && (
                 <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300">
-                    <div className="bg-white p-8 m-6 max-w-6xl self-center">
+                    <div className="bg-white p-8 m-6 self-center" style={{ width: '210mm' }} ref={documentRef}>
                         <header className={styles.header}>
                             <h1 className={styles.headerTitle}>{title}</h1>
                             <div className={styles.headerContent}>
