@@ -220,7 +220,7 @@ export default function Resume() {
                 </div>
             </form>
             {!isLoading && (
-                <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300">
+                <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300 overflow-auto">
                     <div className="bg-white p-8 m-6 self-center" style={{ width: '210mm' }} ref={documentRef}>
                         <header className={styles.header}>
                             <h1 className={styles.headerTitle}>{title}</h1>
