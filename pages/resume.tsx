@@ -19,7 +19,8 @@ export default function Resume() {
     const { addToast } = useToasts();
     const { control, register, watch, setValue } = useForm<any>({
         defaultValues: {
-            title: 'Foo Bar (Software Engineer)',
+            name: 'Foo Bar',
+            title: 'Software Engineer',
             telephone: '+12345678',
             email: 'foo.bar@email.com',
             address: '',
@@ -64,7 +65,7 @@ export default function Resume() {
         }
     }, [authUser]);
 
-    const { title, telephone, email, address, imageId, sections } = fieldValues;
+    const { name, title, telephone, email, address, imageId, sections } = fieldValues;
     return (
         <div className="flex flex-row flex-grow overflow overflow-hidden">
             {isLoading && (
@@ -108,6 +109,7 @@ export default function Resume() {
                 </div>
 
                 <div className="p-5">
+                    <TextInput label="Name" inputRef={register} name="name" />
                     <TextInput label="Title" inputRef={register} name="title" />
 
                     <div className="mb-5">
@@ -188,6 +190,7 @@ export default function Resume() {
                     <TextInput label="Telephone" inputRef={register} name="telephone" />
                     <TextAreaInput label="Address" inputRef={register} name="address" />
 
+                    <h2>Education</h2>
                     {fields.map((section, index) => (
                         <div key={section.id}>
                             <SectionEditor index={index} section={section} register={register} control={control} />
@@ -198,7 +201,7 @@ export default function Resume() {
                                     remove(index);
                                 }}
                             >
-                                Remove Section
+                                Remove
                             </button>
                         </div>
                     ))}
@@ -214,47 +217,68 @@ export default function Resume() {
                                 });
                             }}
                         >
-                            + Add Section
+                            + Add
                         </button>
                     </div>
                 </div>
             </form>
             {!isLoading && (
-                <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300 overflow-auto">
-                    <div className="bg-white p-8 m-6 self-center" style={{ width: '210mm' }} ref={documentRef}>
-                        <header className={styles.header}>
-                            <h1 className={styles.headerTitle}>{title}</h1>
-                            <div className={styles.headerContent}>
-                                <div className={styles.headerContentDesc}>
-                                    <a className={styles.email} href={`mailto: ${email}`}>
-                                        {email}
-                                    </a>
-                                    <br />
-                                    <strong>{telephone}</strong>
-                                    <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
-                                </div>
-                                <Image className={styles.headerContentImage} publicId={imageId}>
-                                    <Transformation width="200" height="200" gravity="faces" crop="fill" />
-                                </Image>
-                            </div>
-                        </header>
-                        {sections?.map((section, index) => {
-                            return (
-                                <section key={`section.id-${index}`} className={styles.section}>
-                                    <div className={styles.sectionSide}>
-                                        <p>{section.title}</p>
-                                        <p>{section.subtitle}</p>
-                                    </div>
-                                    <div
-                                        className={styles.sectionContent}
-                                        dangerouslySetInnerHTML={{ __html: section.content }}
-                                    />
-                                </section>
-                            );
-                        })}
-                    </div>
-                </div>
+                <ResumePreview
+                    documentRef={documentRef}
+                    name={name}
+                    title={title}
+                    email={email}
+                    address={address}
+                    telephone={telephone}
+                    sections={sections}
+                    imageId={imageId}
+                />
             )}
         </div>
     );
+}
+
+function ResumePreview({ documentRef, title, email, address, telephone, sections, imageId, name }) {
+    return (
+        <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300 overflow-auto">
+            <div className="bg-white p-8 m-6 self-center" style={{ width: '210mm' }} ref={documentRef}>
+                <header className={styles.header}>
+                    <h1 className={styles.headerTitle}>
+                        {name} ({title})
+                    </h1>
+                    <div className={styles.headerContent}>
+                        <div className={styles.headerContentDesc}>
+                            <a className={styles.email} href={`mailto: ${email}`}>
+                                {email}
+                            </a>
+                            <br />
+                            <strong>{telephone}</strong>
+                            <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
+                        </div>
+                        <Image className={styles.headerContentImage} publicId={imageId}>
+                            <Transformation width="200" height="200" gravity="faces" crop="fill" />
+                        </Image>
+                    </div>
+                </header>
+                <SectionList sections={sections} />
+            </div>
+        </div>
+    );
+}
+
+function SectionList({ sections }) {
+    return sections?.map((section, index) => {
+        return (
+            <section key={`section.id-${index}`} className={styles.section}>
+                <div className={styles.sectionSide}>
+                    <p>{section.duration}</p>
+                </div>
+                <div className={styles.sectionContent}>
+                    <h1>{section.title}</h1>
+                    <h2>{section.subtitle}</h2>
+                    <div dangerouslySetInnerHTML={{ __html: section.content }} />
+                </div>
+            </section>
+        );
+    });
 }

@@ -12,16 +12,23 @@ export default function SectionEditor({ section, control, register, index }) {
             <hr />
             <div className="mb-4 mt-4">
                 <TextInput
-                    label={`Section title`}
+                    label={`Title`}
                     inputRef={register()}
                     name={`sections[${index}].title`}
                     defaultValue={section.title}
                 />
+                
                 <TextInput
-                    label={`Section subtitle`}
+                    label={`Subtitle`}
                     inputRef={register()}
                     name={`sections[${index}].subtitle`}
                     defaultValue={section.subtitle}
+                />
+                <TextInput
+                    label={`Duration`}
+                    inputRef={register()}
+                    name={`sections[${index}].duration`}
+                    defaultValue={section.duration}
                 />
                 {ReactQuill ? (
                     <Controller
