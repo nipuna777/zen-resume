@@ -1,6 +1,6 @@
-export default function TextInput({ label, name, inputRef, hidden = false, defaultValue = '' }) {
+export default function TextInput({ label, name, inputRef, className = '', hidden = false, defaultValue = '' }) {
     return (
-        <div className={`mb-5 ${hidden && 'hidden'}`}>
+        <div className={`mb-5 ${hidden && 'hidden'} ${className}`}>
             <label className="block text-gray-700 text-sm font-bold mb-2">
                 {label}
                 <input
