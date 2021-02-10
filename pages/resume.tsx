@@ -55,7 +55,7 @@ export default function Resume() {
         }
     }, [authUser]);
 
-    const { name, title, telephone, email, address, imageId, sections } = fieldValues;
+    const { name, title, telephone, email, address, imageId, sections, bioSections } = fieldValues;
     return (
         <div className="flex flex-row flex-grow overflow overflow-hidden">
             {isLoading && (
@@ -84,9 +84,65 @@ export default function Resume() {
                     address={address}
                     telephone={telephone}
                     sections={sections}
+                    bioSections={bioSections}
                     imageId={imageId}
                 />
             )}
+        </div>
+    );
+}
+
+function BioSectionEditor({ register, control }) {
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'bioSections',
+    });
+
+    return (
+        <div>
+            {fields.map((bioSection, index) => (
+                <div key={bioSection.id}>
+                    <div className="flex flex-row">
+                        <TextInput
+                            className="w-24"
+                            label="Title"
+                            inputRef={register}
+                            name={`bioSections[${index}].title`}
+                            defaultValue={bioSection.title}
+                        />
+                        <TextInput
+                            className="ml-1 flex-grow"
+                            label="Label"
+                            inputRef={register}
+                            name={`bioSections[${index}].label`}
+                            defaultValue={bioSection.label}
+                        />
+                    </div>
+
+                    <button
+                        className="bg-transparent hover:bg-red-300 text-red-400 text-sm hover:text-white p-1 mb-3 border border-red-300 hover:border-transparent rounded"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            remove(index);
+                        }}
+                    >
+                        Remove
+                    </button>
+                </div>
+            ))}
+
+            <button
+                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                onClick={(e) => {
+                    e.preventDefault();
+                    append({
+                        title: 'Bio section title',
+                        content: 'Bio section label',
+                    });
+                }}
+            >
+                + Add bio section
+            </button>
         </div>
     );
 }
@@ -142,75 +198,15 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                 <TextInput label="Name" inputRef={register} name="name" />
                 <TextInput label="Title" inputRef={register} name="title" />
 
-                <div className="mb-5">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Select Image (Maximum 10mb)</label>
-                    <div className={imageId !== placeHolderImageId && 'hidden'}>
-                        <input
-                            type="file"
-                            name="profile-image"
-                            accept="image/*"
-                            ref={uploadRef}
-                            onChange={(event) => {
-                                let selectedFile = event.target.files[0];
-                                const mbFileSize = event.target.files[0].size / (1024 * 1024);
-                                if (mbFileSize > 10) {
-                                    alert('Image size too large. Must be no larger than 10MB');
-                                    return;
-                                }
+                <BioSectionEditor register={register} control={control} />
 
-                                var data = new FormData();
-                                data.append('file', selectedFile);
-                                data.append('upload_preset', 'smkrczl7');
-
-                                setIsLoading(true);
-                                fetch('https://api.cloudinary.com/v1_1/dtmkcgalp/upload', {
-                                    method: 'POST',
-                                    body: data,
-                                })
-                                    .then((res) => res.json())
-                                    .then((res) => {
-                                        if (res.error) {
-                                            console.error(res.error);
-                                            const message = res.error.message || 'Error uploading image';
-                                            addToast(message, { appearance: 'error' });
-                                        } else {
-                                            console.log(res.public_id);
-                                            setValue('imageId', res.public_id);
-                                            addToast('Uploaded image succesfully', { appearance: 'success' });
-                                        }
-                                    })
-                                    .catch((error) => {
-                                        console.error(error);
-                                        const message = error.message || 'Error uploading image';
-                                        addToast(message, { appearance: 'error' });
-                                    })
-                                    .finally(() => {
-                                        setIsLoading(false);
-                                    });
-                            }}
-                        />
-                    </div>
-
-                    <div
-                        className={`flex flex-row align-middle justify-between items-center ${
-                            imageId === placeHolderImageId && 'hidden'
-                        }`}
-                    >
-                        <Image className="w-16" publicId={imageId}>
-                            <Transformation width="200" height="200" gravity="faces" crop="fill" />
-                        </Image>
-                        <button
-                            className="bg-transparent hover:bg-red-300 text-red-400 text-sm hover:text-white p-1 mb-3 border border-red-300 hover:border-transparent rounded"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setValue('imageId', placeHolderImageId);
-                                uploadRef.current.click();
-                            }}
-                        >
-                            Change image
-                        </button>
-                    </div>
-                </div>
+                <ImageUpload
+                    imageId={imageId}
+                    uploadRef={uploadRef}
+                    setIsLoading={setIsLoading}
+                    addToast={addToast}
+                    setValue={setValue}
+                />
 
                 <TextInput label="Image ID" inputRef={register} name="imageId" hidden />
 
@@ -253,7 +249,81 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
     );
 }
 
-function ResumePreview({ documentRef, title, email, address, telephone, sections, imageId, name }) {
+function ImageUpload({ imageId, uploadRef, setIsLoading, addToast, setValue }) {
+    return (
+        <div className="mb-5">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Select Image (Maximum 10mb)</label>
+            <div className={imageId !== placeHolderImageId && 'hidden'}>
+                <input
+                    type="file"
+                    name="profile-image"
+                    accept="image/*"
+                    ref={uploadRef}
+                    onChange={(event) => {
+                        let selectedFile = event.target.files[0];
+                        const mbFileSize = event.target.files[0].size / (1024 * 1024);
+                        if (mbFileSize > 10) {
+                            alert('Image size too large. Must be no larger than 10MB');
+                            return;
+                        }
+
+                        var data = new FormData();
+                        data.append('file', selectedFile);
+                        data.append('upload_preset', 'smkrczl7');
+
+                        setIsLoading(true);
+                        fetch('https://api.cloudinary.com/v1_1/dtmkcgalp/upload', {
+                            method: 'POST',
+                            body: data,
+                        })
+                            .then((res) => res.json())
+                            .then((res) => {
+                                if (res.error) {
+                                    console.error(res.error);
+                                    const message = res.error.message || 'Error uploading image';
+                                    addToast(message, { appearance: 'error' });
+                                } else {
+                                    console.log(res.public_id);
+                                    setValue('imageId', res.public_id);
+                                    addToast('Uploaded image succesfully', { appearance: 'success' });
+                                }
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                                const message = error.message || 'Error uploading image';
+                                addToast(message, { appearance: 'error' });
+                            })
+                            .finally(() => {
+                                setIsLoading(false);
+                            });
+                    }}
+                />
+            </div>
+
+            <div
+                className={`flex flex-row align-middle justify-between items-center ${
+                    imageId === placeHolderImageId && 'hidden'
+                }`}
+            >
+                <Image className="w-16" publicId={imageId}>
+                    <Transformation width="200" height="200" gravity="faces" crop="fill" />
+                </Image>
+                <button
+                    className="bg-transparent hover:bg-red-300 text-red-400 text-sm hover:text-white p-1 mb-3 border border-red-300 hover:border-transparent rounded"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setValue('imageId', placeHolderImageId);
+                        uploadRef.current.click();
+                    }}
+                >
+                    Change image
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function ResumePreview({ documentRef, title, email, address, telephone, sections, bioSections, imageId, name }) {
     return (
         <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300 overflow-auto">
             <div className="bg-white p-8 m-6 self-center" style={{ width: '210mm' }} ref={documentRef}>
@@ -269,6 +339,11 @@ function ResumePreview({ documentRef, title, email, address, telephone, sections
                             <br />
                             <strong>{telephone}</strong>
                             <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
+                            {bioSections?.map((bioSection) => (
+                                <p>
+                                    <strong>{bioSection.title} :</strong> {bioSection.label}
+                                </p>
+                            ))}
                         </div>
                         <Image className={styles.headerContentImage} publicId={imageId}>
                             <Transformation width="200" height="200" gravity="faces" crop="fill" />
