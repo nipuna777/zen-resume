@@ -10,6 +10,7 @@ import firebase from 'firebase';
 import { useToasts } from 'react-toast-notifications';
 import SectionEditor from '../components/section';
 import { useReactToPrint } from 'react-to-print';
+import Button from '../components/button';
 
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
@@ -119,30 +120,20 @@ function BioSectionEditor({ register, control }) {
                         />
                     </div>
 
-                    <button
-                        className="bg-transparent hover:bg-red-300 text-red-400 text-sm hover:text-white p-1 mb-3 border border-red-300 hover:border-transparent rounded"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            remove(index);
-                        }}
-                    >
-                        Remove
-                    </button>
+                    <Button onClick={() => remove(index)} label={`Remove bio item`} color="danger" size="sm" />
                 </div>
             ))}
 
-            <button
-                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                onClick={(e) => {
-                    e.preventDefault();
+            <Button
+                size="sm"
+                onClick={() => {
                     append({
                         title: 'Bio section title',
                         content: 'Bio section label',
                     });
                 }}
-            >
-                + Add bio section
-            </button>
+                label="+ Add bio item"
+            />
         </div>
     );
 }
@@ -161,10 +152,9 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
     return (
         <form className=" flex-col overflow-y-auto overflow-x-hidden bg-gray-200 bg-opacity-25">
             <div className="flex flex-row p-5 sticky top-0 left-0 bg-gray-300 z-10">
-                <button
-                    className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded flex-1"
-                    onClick={(event) => {
-                        event.preventDefault();
+                <Button
+                    className="flex-1 mr-2"
+                    onClick={() => {
                         setIsLoading(true);
 
                         db.collection('resumes')
@@ -180,18 +170,10 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                                 setIsLoading(false);
                             });
                     }}
-                >
-                    Save
-                </button>
-                <button
-                    className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 ml-2 border border-gray-500 hover:border-transparent rounded"
-                    onClick={(event) => {
-                        event.preventDefault();
-                        handlePrint();
-                    }}
-                >
-                    Print
-                </button>
+                    label="Save"
+                />
+
+                <Button onClick={handlePrint} label="Print" color="secondary" />
             </div>
 
             <div className="p-5">
@@ -218,31 +200,30 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                 {fields.map((section, index) => (
                     <div key={section.id}>
                         <SectionEditor index={index} section={section} register={register} control={control} />
-                        <button
-                            className="bg-transparent hover:bg-red-300 text-red-400 text-sm hover:text-white p-1 mb-3 border border-red-300 hover:border-transparent rounded"
-                            onClick={(e) => {
-                                e.preventDefault();
+                        <Button
+                            onClick={() => {
                                 remove(index);
                             }}
-                        >
-                            Remove
-                        </button>
+                            label="Remove"
+                            size="sm"
+                            color="danger"
+                        />
                     </div>
                 ))}
 
                 <div>
-                    <button
-                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            append({
-                                title: 'Section Title',
-                                content: 'Add Content',
-                            });
+                    <Button
+                        onClick={() => {
+                            () => {
+                                append({
+                                    title: 'Section Title',
+                                    content: 'Add Content',
+                                });
+                            };
                         }}
-                    >
-                        + Add
-                    </button>
+                        label="+ Add"
+                        size="sm"
+                    />
                 </div>
             </div>
         </form>
@@ -308,16 +289,15 @@ function ImageUpload({ imageId, uploadRef, setIsLoading, addToast, setValue }) {
                 <Image className="w-16" publicId={imageId}>
                     <Transformation width="200" height="200" gravity="faces" crop="fill" />
                 </Image>
-                <button
-                    className="bg-transparent hover:bg-red-300 text-red-400 text-sm hover:text-white p-1 mb-3 border border-red-300 hover:border-transparent rounded"
-                    onClick={(e) => {
-                        e.preventDefault();
+                <Button
+                    onClick={() => {
                         setValue('imageId', placeHolderImageId);
                         uploadRef.current.click();
                     }}
-                >
-                    Change image
-                </button>
+                    label="Change image"
+                    size="sm"
+                    color="secondary"
+                />
             </div>
         </div>
     );
