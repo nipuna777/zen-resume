@@ -15,7 +15,7 @@ export default function Button({
 }) {
     let colorClasses = 'hover:bg-blue-500 text-blue-700 border-blue-500 ';
     switch (color) {
-        case 'danger':
+         case 'danger':
             colorClasses = 'hover:bg-red-300 text-red-400 border-red-300';
             break;
         case 'secondary':
