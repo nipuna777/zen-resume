@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 import { CloudinaryContext } from 'cloudinary-react';
 import firebase from 'firebase';
 import { ToastProvider } from 'react-toast-notifications';

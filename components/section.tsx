@@ -17,7 +17,7 @@ export default function SectionEditor({ section, control, register, index }) {
                     name={`sections[${index}].title`}
                     defaultValue={section.title}
                 />
-                
+
                 <TextInput
                     label={`Subtitle`}
                     inputRef={register()}
@@ -32,7 +32,12 @@ export default function SectionEditor({ section, control, register, index }) {
                 />
                 {ReactQuill ? (
                     <Controller
-                        as={ReactQuill}
+                        as={
+                            <ReactQuill
+                                className="shadow text-gray-700 focus:shadow-outline bg-white"
+                                theme={'bubble'}
+                            />
+                        }
                         name={`sections[${index}].content`}
                         control={control}
                         defaultValue={section.content}
