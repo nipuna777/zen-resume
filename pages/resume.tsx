@@ -134,8 +134,9 @@ function BioSectionEditor({ register, control }) {
                         content: 'Bio section label',
                     });
                 }}
-                label="+ Add bio item"
-            />
+            >
+                + Add bio item
+            </Button>
         </div>
     );
 }
@@ -172,10 +173,13 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                                 setIsLoading(false);
                             });
                     }}
-                    label="Save"
-                />
+                >
+                    Save
+                </Button>
 
-                <Button onClick={handlePrint} label="Print" color="secondary" />
+                <Button onClick={handlePrint} color="secondary">
+                    Print
+                </Button>
             </div>
 
             <div className="p-5">
@@ -206,10 +210,11 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                             onClick={() => {
                                 remove(index);
                             }}
-                            label="Remove"
                             size="sm"
                             color="danger"
-                        />
+                        >
+                            Remove
+                        </Button>
                     </div>
                 ))}
 
@@ -223,9 +228,10 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                                 });
                             };
                         }}
-                        label="+ Add"
                         size="sm"
-                    />
+                    >
+                        + Add
+                    </Button>
                 </div>
             </div>
         </form>
@@ -296,10 +302,11 @@ function ImageUpload({ imageId, uploadRef, setIsLoading, addToast, setValue }) {
                         setValue('imageId', placeHolderImageId);
                         uploadRef.current.click();
                     }}
-                    label="Change image"
                     size="sm"
                     color="secondary"
-                />
+                >
+                    Change image
+                </Button>
             </div>
         </div>
     );
