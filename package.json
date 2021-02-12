@@ -19,6 +19,7 @@
         "react-dom": "16.13.1",
         "react-firebaseui": "^4.1.0",
         "react-hook-form": "^6.8.0",
+        "react-icons": "^4.2.0",
         "react-quill": "^2.0.0-beta.2",
         "react-to-print": "^2.10.0",
         "react-toast-notifications": "^2.4.0",

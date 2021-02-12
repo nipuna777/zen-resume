@@ -11,6 +11,7 @@ import { useToasts } from 'react-toast-notifications';
 import SectionEditor from '../components/section';
 import { useReactToPrint } from 'react-to-print';
 import Button from '../components/button';
+import { HiXCircle } from 'react-icons/hi';
 
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
@@ -102,25 +103,26 @@ function BioSectionEditor({ register, control }) {
     return (
         <div>
             {fields.map((bioSection, index) => (
-                <div key={bioSection.id}>
-                    <div className="flex flex-row">
-                        <TextInput
-                            className="w-24"
-                            label="Title"
-                            inputRef={register}
-                            name={`bioSections[${index}].title`}
-                            defaultValue={bioSection.title}
-                        />
-                        <TextInput
-                            className="ml-1 flex-grow"
-                            label="Label"
-                            inputRef={register}
-                            name={`bioSections[${index}].label`}
-                            defaultValue={bioSection.label}
-                        />
-                    </div>
-
-                    <Button onClick={() => remove(index)} label={`Remove bio item`} color="danger" size="sm" />
+                <div key={bioSection.id} className="flex flex-row">
+                    <TextInput
+                        className="w-24"
+                        label="Title"
+                        inputRef={register}
+                        name={`bioSections[${index}].title`}
+                        defaultValue={bioSection.title}
+                    />
+                    <TextInput
+                        className="ml-1 flex-grow "
+                        label="Label"
+                        inputRef={register}
+                        name={`bioSections[${index}].label`}
+                        defaultValue={bioSection.label}
+                    />
+                    <HiXCircle
+                        className="self-center text-gray-500 cursor-pointer mb-3 ml-2"
+                        size={32}
+                        onClick={() => remove(index)}
+                    />
                 </div>
             ))}
 
