@@ -1,5 +1,6 @@
 import { Controller } from 'react-hook-form';
 import TextInput from '../components/text-input';
+import QuillControl from './quill-control';
 
 let ReactQuill;
 if (typeof window !== 'undefined') {
@@ -30,19 +31,7 @@ export default function SectionEditor({ section, control, register, index }) {
                     name={`sections[${index}].duration`}
                     defaultValue={section.duration}
                 />
-                {ReactQuill ? (
-                    <Controller
-                        as={
-                            <ReactQuill
-                                className="shadow text-gray-700 focus:shadow-outline bg-white"
-                                theme={'bubble'}
-                            />
-                        }
-                        name={`sections[${index}].content`}
-                        control={control}
-                        defaultValue={section.content}
-                    />
-                ) : null}
+                <QuillControl control={control} name={`sections[${index}].content`} defaultValue={section.content} />
             </div>
         </>
     );

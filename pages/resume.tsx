@@ -12,6 +12,7 @@ import SectionEditor from '../components/section';
 import { useReactToPrint } from 'react-to-print';
 import Button from '../components/button';
 import { HiXCircle } from 'react-icons/hi';
+import QuillControl from '../components/quill-control';
 
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
@@ -57,7 +58,7 @@ export default function Resume() {
         }
     }, [authUser]);
 
-    const { name, title, telephone, email, address, imageId, sections, bioSections } = fieldValues;
+    const { name, title, telephone, email, address, imageId, sections, bioSections, skills } = fieldValues;
     return (
         <div className="flex flex-row flex-grow overflow overflow-hidden">
             {isLoading && (
@@ -88,6 +89,7 @@ export default function Resume() {
                     sections={sections}
                     bioSections={bioSections}
                     imageId={imageId}
+                    skills={skills}
                 />
             )}
         </div>
@@ -119,7 +121,7 @@ function BioSectionEditor({ register, control }) {
                         defaultValue={bioSection.label}
                     />
                     <HiXCircle
-                        className="self-center text-gray-500 cursor-pointer mb-3 ml-2"
+                        className="self-center text-gray-500 hover:text-red-500 cursor-pointer mb-3 ml-2"
                         size={32}
                         onClick={() => remove(index)}
                     />
@@ -143,9 +145,13 @@ function BioSectionEditor({ register, control }) {
 
 function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, fieldValues, imageId, setValue }) {
     const { addToast } = useToasts();
-    const { fields, append, remove } = useFieldArray({
+    const eductionFieldArray = useFieldArray({
         control,
         name: 'sections',
+    });
+    const skillsFieldArray = useFieldArray({
+        control,
+        name: 'skills',
     });
     const uploadRef = useRef(null);
     const handlePrint = useReactToPrint({
@@ -202,13 +208,40 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                 <TextInput label="Telephone" inputRef={register} name="telephone" />
                 <TextAreaInput label="Address" inputRef={register} name="address" />
 
+                <h2>Skills</h2>
+                {skillsFieldArray.fields.map((skill, index) => (
+                    <div key={skill.id} className="flex flex-row">
+                        <QuillControl
+                            className="flex-1 mb-3 mr-3"
+                            control={control}
+                            name={`skills[${index}].content`}
+                            defaultValue={skill.content}
+                        />
+                        <HiXCircle
+                            className="self-center text-gray-500 hover:text-red-500 text-h cursor-pointer mb-3"
+                            size={32}
+                            onClick={() => skillsFieldArray.remove(index)}
+                        />
+                    </div>
+                ))}
+                <Button
+                    onClick={() => {
+                        skillsFieldArray.append({
+                            content: '',
+                        });
+                    }}
+                    size="sm"
+                >
+                    + Add
+                </Button>
+
                 <h2>Education</h2>
-                {fields.map((section, index) => (
+                {eductionFieldArray.fields.map((section, index) => (
                     <div key={section.id}>
                         <SectionEditor index={index} section={section} register={register} control={control} />
                         <Button
                             onClick={() => {
-                                remove(index);
+                                eductionFieldArray.remove(index);
                             }}
                             size="sm"
                             color="danger"
@@ -217,22 +250,17 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                         </Button>
                     </div>
                 ))}
-
-                <div>
-                    <Button
-                        onClick={() => {
-                            () => {
-                                append({
-                                    title: 'Section Title',
-                                    content: 'Add Content',
-                                });
-                            };
-                        }}
-                        size="sm"
-                    >
-                        + Add
-                    </Button>
-                </div>
+                <Button
+                    onClick={() => {
+                        eductionFieldArray.append({
+                            title: 'Section Title',
+                            content: 'Add Content',
+                        });
+                    }}
+                    size="sm"
+                >
+                    + Add
+                </Button>
             </div>
         </form>
     );
@@ -312,7 +340,19 @@ function ImageUpload({ imageId, uploadRef, setIsLoading, addToast, setValue }) {
     );
 }
 
-function ResumePreview({ documentRef, title, email, address, telephone, sections, bioSections, imageId, name }) {
+function ResumePreview({
+    documentRef,
+    title,
+    email,
+    address,
+    telephone,
+    sections,
+    bioSections,
+    skills,
+    imageId,
+    name,
+}) {
+    console.log(skills);
     return (
         <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300 overflow-auto">
             <div className="bg-white p-8 m-6 self-center" style={{ width: '210mm' }} ref={documentRef}>
@@ -339,6 +379,17 @@ function ResumePreview({ documentRef, title, email, address, telephone, sections
                         </Image>
                     </div>
                 </header>
+
+                <div className="my-10">
+                    <h1>Skills</h1>
+                    {skills?.map((skill) => (
+                        <ul className="pl-6">
+                            <li dangerouslySetInnerHTML={{ __html: skill.content }} />
+                        </ul>
+                    ))}
+                </div>
+
+                <h1>Education</h1>
                 <SectionList sections={sections} />
             </div>
         </div>
