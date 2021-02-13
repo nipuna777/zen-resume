@@ -3,4 +3,7 @@ module.exports = {
     variants: {},
     plugins: [],
     purge: ['./pages/**/*.tsx', './components/**/*.tsx'],
+    future: {
+        removeDeprecatedGapUtilities: true,
+    },
 };
