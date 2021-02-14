@@ -1,4 +1,3 @@
-import styles from '../styles/Resume.module.css';
 import { useForm, useFieldArray } from 'react-hook-form';
 import TextInput from '../components/text-input';
 import TextAreaInput from '../components/text-area-input';
@@ -13,6 +12,7 @@ import { useReactToPrint } from 'react-to-print';
 import Button from '../components/button';
 import { HiXCircle } from 'react-icons/hi';
 import QuillControl from '../components/quill-control';
+import ResumePreview from '../components/resume-preview';
 
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
@@ -338,78 +338,4 @@ function ImageUpload({ imageId, uploadRef, setIsLoading, addToast, setValue }) {
             </div>
         </div>
     );
-}
-
-function ResumePreview({
-    documentRef,
-    title,
-    email,
-    address,
-    telephone,
-    sections,
-    bioSections,
-    skills,
-    imageId,
-    name,
-}) {
-    console.log(skills);
-    return (
-        <div className="flex flex-col w-full  border-l-2 border-gray-400 bg-gray-300 overflow-auto">
-            <div className="bg-white p-8 m-6 self-center" style={{ width: '210mm' }} ref={documentRef}>
-                <header className={styles.header}>
-                    <h1 className={styles.headerTitle}>
-                        {name} ({title})
-                    </h1>
-                    <div className={styles.headerContent}>
-                        <div className={styles.headerContentDesc}>
-                            <a className={styles.email} href={`mailto: ${email}`}>
-                                {email}
-                            </a>
-                            <br />
-                            <strong>{telephone}</strong>
-                            <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
-                            {bioSections?.map((bioSection) => (
-                                <p>
-                                    <strong>{bioSection.title} :</strong> {bioSection.label}
-                                </p>
-                            ))}
-                        </div>
-                        <Image className={styles.headerContentImage} publicId={imageId}>
-                            <Transformation width="200" height="200" gravity="faces" crop="fill" />
-                        </Image>
-                    </div>
-                </header>
-
-                <div className="my-10">
-                    <h1>Skills</h1>
-                    {skills?.map((skill) => (
-                        <ul className="pl-6">
-                            <li dangerouslySetInnerHTML={{ __html: skill.content }} />
-                        </ul>
-                    ))}
-                </div>
-
-                <h1>Education</h1>
-                <SectionList sections={sections} />
-            </div>
-        </div>
-    );
-}
-
-function SectionList({ sections }) {
-    if (!sections?.length) return null;
-    return sections?.map((section, index) => {
-        return (
-            <section key={`section.id-${index}`} className={styles.section}>
-                <div className={styles.sectionSide}>
-                    <p>{section.duration}</p>
-                </div>
-                <div className={styles.sectionContent}>
-                    <h1>{section.title}</h1>
-                    <h2>{section.subtitle}</h2>
-                    <div dangerouslySetInnerHTML={{ __html: section.content }} />
-                </div>
-            </section>
-        );
-    });
 }

@@ -1,12 +1,18 @@
 .container {
-    font-family: 'Lato', sans-serif;
-    font-size: 20.5px;
-    --primary: #00004c;
-
     display: flex;
     flex-direction: column;
-    padding: 2em;
     width: 100%;
+    border-left-width: 2px;
+    border-color: #cbd5e0;
+    background-color: #e2e8f0;
+    overflow: auto;
+}
+
+.background {
+    background-color: white;
+    padding: 2rem;
+    margin: 1.5rem;
+    align-self: center;
 }
 
 .header {
@@ -41,7 +47,14 @@
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-/*  */
+.skillsContainer {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.skillsContainer ul {
+    padding-left: 1.5rem;
+}
 
 .section {
     display: flex;
@@ -56,7 +69,6 @@
     padding-top: 0.75em;
     padding-right: 0.75em;
     flex: 0 0 200px;
-    /* color: #00004c; */
     color: var(--primary);
 }
 
@@ -87,55 +99,4 @@
 
 .section .content ul {
     margin: 0;
-}
-
-.qualification {
-    margin-bottom: 1.5em;
-}
-
-.qualification:last-of-type {
-    margin-bottom: 0;
-}
-
-.qualification-title {
-    padding-bottom: 0.1em;
-}
-
-.qualification-date {
-    margin-bottom: 0.7em;
-    font-weight: lighter;
-    font-size: 1em;
-    color: #333;
-}
-
-.qualification-content {
-}
-
-.section.heading .side {
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-.references {
-    display: flex;
-    width: 100%;
-}
-
-.references .referee {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.content .points {
-    display: block;
-    padding-bottom: 0.3em;
-}
-
-.disclaimer .signature {
-    display: flex;
-}
-
-.disclaimer .signature div {
-    flex: 1;
 }
