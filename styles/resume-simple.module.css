@@ -1,0 +1,98 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-left-width: 2px;
+    border-color: #cbd5e0;
+    background-color: #e2e8f0;
+    overflow: auto;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.background {
+    background-color: white;
+    padding: 2rem;
+    margin: 1.5rem;
+    align-self: center;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2.5em;
+}
+
+.headerTitle {
+    display: flex;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding-top: 0.75em;
+    padding-right: 0.75em;
+    font-size: 24px;
+}
+
+.headerContent {
+    display: flex;
+    flex: 1;
+}
+
+.headerContentDesc {
+    flex: 1;
+}
+
+.headerContentImage {
+    width: 200px;
+    height: auto;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.skillsContainer {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.skillsContainer ul {
+    padding-left: 1.5rem;
+}
+
+.section {
+    margin-bottom: 2.5em;
+}
+
+.sectionSide {
+    position: relative;
+    font-size: 1.2em;
+    padding-top: 0.75em;
+    padding-right: 0.75em;
+    flex: 0 0 200px;
+    color: var(--primary);
+}
+
+.section .side:after {
+    content: '';
+    width: 25px;
+    height: 2px;
+    background: #000;
+    position: absolute;
+    top: -2px;
+    left: 0;
+    display: block;
+}
+
+.sectionContent {
+    padding-top: 0.75em;
+    width: 100%;
+    border-top: 4px solid var(--primary);
+}
+
+.section .content p:first-child {
+    margin-top: 0;
+}
+
+.section .content p:last-child {
+    margin-bottom: 0;
+}
+
+.section .content ul {
+    margin: 0;
+}

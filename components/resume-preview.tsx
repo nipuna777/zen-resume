@@ -1,5 +1,3 @@
-import React from 'react';
-import styles from '../styles/Resume.module.css';
 import { Image, Transformation } from 'cloudinary-react';
 
 export default function ResumePreview({
@@ -13,6 +11,7 @@ export default function ResumePreview({
     skills,
     imageId,
     name,
+    styles,
 }) {
     return (
         <div className={styles.container}>
@@ -49,13 +48,13 @@ export default function ResumePreview({
                 </div>
 
                 <h1>Education</h1>
-                <SectionList sections={sections} />
+                <SectionList styles={styles} sections={sections} />
             </div>
         </div>
     );
 }
 
-function SectionList({ sections }) {
+function SectionList({ sections, styles }) {
     if (!sections?.length) return null;
     return sections?.map((section, index) => {
         return (

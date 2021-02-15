@@ -14,9 +14,18 @@ import { HiXCircle } from 'react-icons/hi';
 import QuillControl from '../components/quill-control';
 import ResumePreview from '../components/resume-preview';
 
+// TODO: lazy load the css
+import defaultTheme from '../styles/resume-default.module.css';
+import simpleTheme from '../styles/resume-simple.module.css';
+
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
 const db = firebase.firestore();
+
+const themeMap = {
+    default: defaultTheme,
+    simple: simpleTheme,
+};
 
 export default function Resume() {
     const { control, register, watch, setValue } = useForm<any>({
@@ -31,6 +40,8 @@ export default function Resume() {
         },
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [styles, setStyles] = useState(defaultTheme);
+
     const documentRef = useRef(null);
     const fieldValues = watch();
 
@@ -76,6 +87,7 @@ export default function Resume() {
                 imageId={imageId}
                 documentRef={documentRef}
                 setValue={setValue}
+                setStyles={setStyles}
             />
 
             {!isLoading && (
@@ -90,6 +102,7 @@ export default function Resume() {
                     bioSections={bioSections}
                     imageId={imageId}
                     skills={skills}
+                    styles={styles}
                 />
             )}
         </div>
@@ -143,7 +156,17 @@ function BioSectionEditor({ register, control }) {
     );
 }
 
-function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, fieldValues, imageId, setValue }) {
+function ResumeEditor({
+    documentRef,
+    setIsLoading,
+    control,
+    register,
+    authUser,
+    fieldValues,
+    imageId,
+    setValue,
+    setStyles,
+}) {
     const { addToast } = useToasts();
     const eductionFieldArray = useFieldArray({
         control,
@@ -187,6 +210,8 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                     Print
                 </Button>
             </div>
+
+            <ThemeSelector setStyles={setStyles} />
 
             <div className="p-5">
                 <TextInput label="Name" inputRef={register} name="name" />
@@ -263,6 +288,25 @@ function ResumeEditor({ documentRef, setIsLoading, control, register, authUser, 
                 </Button>
             </div>
         </form>
+    );
+}
+
+function ThemeSelector({ setStyles }) {
+    return (
+        <div className="flex justify-end p-2 bg-gray-200">
+            <label className="block text-gray-700 text-sm font-bold">
+                Theme
+                <select
+                    className="border-gray-300 border-2 ml-2"
+                    onChange={(event) => {
+                        setStyles(themeMap[event.target.value]);
+                    }}
+                >
+                    <option value="default">Default</option>
+                    <option value="simple">Simple</option>
+                </select>
+            </label>
+        </div>
     );
 }
 
