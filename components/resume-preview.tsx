@@ -13,6 +13,18 @@ export default function ResumePreview({
     name,
     styles,
 }) {
+    const sectionsByTypeMap = new Map();
+    sections?.forEach((section) => {
+        if (sectionsByTypeMap.has(section.type)) {
+            const current = sectionsByTypeMap.get(section.type);
+            sectionsByTypeMap.set(section.type, [section, ...current]);
+        } else {
+            sectionsByTypeMap.set(section.type, [section]);
+        }
+    });
+
+    const sectionsByTypeArray = Array.from(sectionsByTypeMap);
+
     return (
         <div className={styles.container}>
             <div className={styles.background} style={{ width: '210mm' }} ref={documentRef}>
@@ -47,8 +59,14 @@ export default function ResumePreview({
                     ))}
                 </div>
 
-                <h1>Education</h1>
-                <SectionList styles={styles} sections={sections} />
+                {sectionsByTypeArray.map((sections) => {
+                    return (
+                        <>
+                            <h1>{sections[0]}</h1>
+                            <SectionList styles={styles} sections={sections[1]} />
+                        </>
+                    );
+                })}
             </div>
         </div>
     );

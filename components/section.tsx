@@ -13,6 +13,13 @@ export default function SectionEditor({ section, control, register, index }) {
             <hr />
             <div className="mb-4 mt-4">
                 <TextInput
+                    label={`Type`}
+                    inputRef={register()}
+                    name={`sections[${index}].type`}
+                    defaultValue={section.type}
+                    hidden={true}
+                />
+                <TextInput
                     label={`Title`}
                     inputRef={register()}
                     name={`sections[${index}].title`}

@@ -168,7 +168,7 @@ function ResumeEditor({
     setStyles,
 }) {
     const { addToast } = useToasts();
-    const eductionFieldArray = useFieldArray({
+    const sectionFieldArray = useFieldArray({
         control,
         name: 'sections',
     });
@@ -260,34 +260,67 @@ function ResumeEditor({
                     + Add
                 </Button>
 
-                <h2>Education</h2>
-                {eductionFieldArray.fields.map((section, index) => (
-                    <div key={section.id}>
-                        <SectionEditor index={index} section={section} register={register} control={control} />
-                        <Button
-                            onClick={() => {
-                                eductionFieldArray.remove(index);
-                            }}
-                            size="sm"
-                            color="danger"
-                        >
-                            Remove
-                        </Button>
-                    </div>
-                ))}
-                <Button
-                    onClick={() => {
-                        eductionFieldArray.append({
-                            title: 'Section Title',
-                            content: 'Add Content',
-                        });
-                    }}
-                    size="sm"
-                >
-                    + Add
-                </Button>
+                <Section type="Education" sectionFieldArray={sectionFieldArray} register={register} control={control} />
+                <Section
+                    type="Work Experience"
+                    sectionFieldArray={sectionFieldArray}
+                    register={register}
+                    control={control}
+                />
             </div>
         </form>
+    );
+}
+
+function Section({ type, sectionFieldArray, register, control }) {
+    return (
+        <>
+            <h2>{type}</h2>
+            {sectionFieldArray.fields.map((section, index) => {
+                if (section.type !== type) return null;
+                return (
+                    <div key={section.id}>
+                        <SectionEditor index={index} section={section} register={register} control={control} />
+                        <RemoveItemButton fieldArray={sectionFieldArray} index={index} />
+                    </div>
+                );
+            })}
+            <ApphendItemButton
+                fieldArray={sectionFieldArray}
+                content={{
+                    type,
+                    title: 'Section Title',
+                    content: 'Add Content',
+                }}
+            />
+        </>
+    );
+}
+
+function ApphendItemButton({ fieldArray, content }) {
+    return (
+        <Button
+            onClick={() => {
+                fieldArray.append(content);
+            }}
+            size="sm"
+        >
+            + Add
+        </Button>
+    );
+}
+
+function RemoveItemButton({ fieldArray, index }) {
+    return (
+        <Button
+            onClick={() => {
+                fieldArray.remove(index);
+            }}
+            size="sm"
+            color="danger"
+        >
+            + Remove
+        </Button>
     );
 }
 
