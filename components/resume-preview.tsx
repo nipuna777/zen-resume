@@ -1,4 +1,5 @@
 import { Image, Transformation } from 'cloudinary-react';
+import { controlTypes } from '../pages/resume';
 
 export default function ResumePreview({
     documentRef,
@@ -75,7 +76,11 @@ export default function ResumePreview({
 function SectionList({ sections, styles }) {
     if (!sections?.length) return null;
     return sections?.map((section, index) => {
-        return (
+        return section.controlType === controlTypes.SIMPLE ? (
+            <section key={`section.id-${index}`} className={styles.section}>
+                <div dangerouslySetInnerHTML={{ __html: section.content }} />
+            </section>
+        ) : (
             <section key={`section.id-${index}`} className={styles.section}>
                 <div className={styles.sectionSide}>
                     <p>{section.duration}</p>

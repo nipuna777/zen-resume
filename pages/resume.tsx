@@ -7,7 +7,8 @@ import LoadingSVG from '../public/images/loading.svg';
 import useFirebaseAuthentication from '../hooks/auth';
 import firebase from 'firebase';
 import { useToasts } from 'react-toast-notifications';
-import SectionEditor from '../components/section';
+import SectionEditor from '../components/section-editor';
+import SimpleSectionEditor from '../components/simple-section-editor';
 import { useReactToPrint } from 'react-to-print';
 import Button from '../components/button';
 import { HiXCircle } from 'react-icons/hi';
@@ -261,6 +262,15 @@ function ResumeEditor({
                 </Button>
 
                 <Section type="Education" sectionFieldArray={sectionFieldArray} register={register} control={control} />
+
+                <Section
+                    controlType="simple"
+                    type="Achievements"
+                    sectionFieldArray={sectionFieldArray}
+                    register={register}
+                    control={control}
+                />
+
                 <Section
                     type="Work Experience"
                     sectionFieldArray={sectionFieldArray}
@@ -272,7 +282,19 @@ function ResumeEditor({
     );
 }
 
-function Section({ type, sectionFieldArray, register, control }) {
+function Section({
+    type,
+    sectionFieldArray,
+    register,
+    control,
+    controlType,
+}: {
+    type: string;
+    sectionFieldArray: any;
+    register: any;
+    control: any;
+    controlType?: any;
+}) {
     return (
         <>
             <h2>{type}</h2>
@@ -280,7 +302,16 @@ function Section({ type, sectionFieldArray, register, control }) {
                 if (section.type !== type) return null;
                 return (
                     <div key={section.id}>
-                        <SectionEditor index={index} section={section} register={register} control={control} />
+                        {controlType === controlTypes.SIMPLE ? (
+                            <SimpleSectionEditor
+                                index={index}
+                                section={section}
+                                register={register}
+                                control={control}
+                            />
+                        ) : (
+                            <SectionEditor index={index} section={section} register={register} control={control} />
+                        )}
                         <RemoveItemButton fieldArray={sectionFieldArray} index={index} />
                     </div>
                 );
@@ -289,6 +320,7 @@ function Section({ type, sectionFieldArray, register, control }) {
                 fieldArray={sectionFieldArray}
                 content={{
                     type,
+                    controlType: controlType,
                     title: 'Section Title',
                     content: 'Add Content',
                 }}
@@ -415,4 +447,9 @@ function ImageUpload({ imageId, uploadRef, setIsLoading, addToast, setValue }) {
             </div>
         </div>
     );
+}
+
+export enum controlTypes {
+    SIMPLE = 'simple',
+    DEFAULT = 'default',
 }

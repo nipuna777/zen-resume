@@ -1,4 +1,3 @@
-import { Controller } from 'react-hook-form';
 import TextInput from '../components/text-input';
 import QuillControl from './quill-control';
 
