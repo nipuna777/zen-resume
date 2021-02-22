@@ -15,9 +15,7 @@ import { HiXCircle } from 'react-icons/hi';
 import QuillControl from '../components/quill-control';
 import ResumePreview from '../components/resume-preview';
 
-// TODO: lazy load the css
 import defaultTheme from '../styles/resume-default.module.css';
-import simpleTheme from '../styles/resume-simple.module.css';
 
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
@@ -25,7 +23,6 @@ const db = firebase.firestore();
 
 const themeMap = {
     default: defaultTheme,
-    simple: simpleTheme,
 };
 
 export default function Resume() {
@@ -363,8 +360,18 @@ function ThemeSelector({ setStyles }) {
                 Theme
                 <select
                     className="border-gray-300 border-2 ml-2"
-                    onChange={(event) => {
-                        setStyles(themeMap[event.target.value]);
+                    onChange={async (event) => {
+                        const themeName = event.target.value;
+
+                        if (themeMap[themeName]) {
+                            setStyles(themeMap[themeName]);
+                        }
+
+                        if (themeName === 'simple') {
+                            const styles = await import('../styles/resume-simple.module.css');
+                            themeMap[themeName] = styles;
+                            setStyles(themeMap[themeName]);
+                        }
                     }}
                 >
                     <option value="default">Default</option>
