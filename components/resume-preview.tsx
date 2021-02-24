@@ -34,18 +34,29 @@ export default function ResumePreview({
                         {name} ({title})
                     </h1>
                     <div className={styles.headerContent}>
-                        <div className={styles.headerContentDesc}>
-                            <a href={`mailto: ${email}`}>{email}</a>
-                            <br />
-                            <strong>{telephone}</strong>
-                            <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
+                        <section className={styles.headerPersonalInfoContainer}>
+                            <ul>
+                                <li>
+                                    <a href={`mailto: ${email}`}>{email}</a>
+                                </li>
+                                <li>
+                                    <a href={`tel:+${telephone}`}>{telephone}</a>
+                                </li>
+                                <li>
+                                    <p style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
+                                </li>
+                            </ul>
+                        </section>
+                        <section className={styles.headerListSection}>
                             {bioSections?.map((bioSection) => (
-                                <p>
-                                    <strong>{bioSection.title} :</strong> {bioSection.label}
-                                </p>
+                                <ul>
+                                    <li>
+                                        {bioSection.title} : {bioSection.label}
+                                    </li>
+                                </ul>
                             ))}
-                        </div>
-                        <Image className={styles.headerContentImage} publicId={imageId}>
+                        </section>
+                        <Image className={styles.headerImage} publicId={imageId}>
                             <Transformation width="200" height="200" gravity="faces" crop="fill" />
                         </Image>
                     </div>
