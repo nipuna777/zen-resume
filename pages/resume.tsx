@@ -14,8 +14,10 @@ import Button from '../components/button';
 import { HiXCircle } from 'react-icons/hi';
 import QuillControl from '../components/quill-control';
 import ResumePreview from '../components/resume-preview';
+import { Listbox, ListboxOption } from '@reach/listbox';
 
 import defaultTheme from '../styles/resume-default.module.css';
+import '@reach/listbox/styles.css';
 
 const placeHolderImageId = 'placeholder-profile_ubymfr';
 
@@ -356,13 +358,12 @@ function RemoveItemButton({ fieldArray, index }) {
 function ThemeSelector({ setStyles }) {
     return (
         <div className="flex justify-end p-2 bg-gray-200">
-            <label className="block text-gray-700 text-sm font-bold">
+            <label className="block text-gray-700 text-sm font-bold flex flex-row">
                 Theme
-                <select
-                    className="border-gray-300 border-2 ml-2"
-                    onChange={async (event) => {
-                        const themeName = event.target.value;
-
+                <Listbox
+                    className="ml-2"
+                    defaultValue="default"
+                    onChange={async (themeName) => {
                         if (themeMap[themeName]) {
                             setStyles(themeMap[themeName]);
                         }
@@ -374,9 +375,9 @@ function ThemeSelector({ setStyles }) {
                         }
                     }}
                 >
-                    <option value="default">Default</option>
-                    <option value="simple">Simple</option>
-                </select>
+                    <ListboxOption value="default">Default</ListboxOption>
+                    <ListboxOption value="simple">Simple</ListboxOption>
+                </Listbox>
             </label>
         </div>
     );
