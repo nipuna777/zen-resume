@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import 'react-quill/dist/quill.bubble.css';
 import { CloudinaryContext } from 'cloudinary-react';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import { ToastProvider } from 'react-toast-notifications';
 import NavBar from '../components/nav-bar';
 
