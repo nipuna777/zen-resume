@@ -1,4 +1,5 @@
 import { Image, Transformation } from 'cloudinary-react';
+import React, { Fragment } from 'react';
 import { controlTypes } from '../pages/resume';
 
 export default function ResumePreview({
@@ -48,13 +49,13 @@ export default function ResumePreview({
                             </ul>
                         </section>
                         <section className={styles.headerListSection}>
-                            {bioSections?.map((bioSection) => (
-                                <ul>
-                                    <li>
+                            <ul>
+                                {bioSections?.map((bioSection, i) => (
+                                    <li key={i}>
                                         {bioSection.title} : {bioSection.label}
                                     </li>
-                                </ul>
-                            ))}
+                                ))}
+                            </ul>
                         </section>
                         <Image className={styles.headerImage} publicId={imageId}>
                             <Transformation width="200" height="200" gravity="faces" crop="fill" />
@@ -64,19 +65,19 @@ export default function ResumePreview({
 
                 <div className={styles.skillsContainer}>
                     <h1>Skills</h1>
-                    {skills?.map((skill) => (
-                        <ul>
-                            <li dangerouslySetInnerHTML={{ __html: skill.content }} />
-                        </ul>
-                    ))}
+                    <ul>
+                        {skills?.map((skill, i) => (
+                            <li key={i} dangerouslySetInnerHTML={{ __html: skill.content }} />
+                        ))}
+                    </ul>
                 </div>
 
-                {sectionsByTypeArray.map((sections) => {
+                {sectionsByTypeArray.map((sections, i) => {
                     return (
-                        <>
+                        <Fragment key={i}>
                             <h1>{sections[0]}</h1>
                             <SectionList styles={styles} sections={sections[1]} />
-                        </>
+                        </Fragment>
                     );
                 })}
             </div>
