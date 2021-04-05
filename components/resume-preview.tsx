@@ -14,6 +14,8 @@ export default function ResumePreview({
     imageId,
     name,
     styles,
+    aboutTitle,
+    aboutContent,
 }) {
     const sectionsByTypeMap = new Map();
     sections?.forEach((section) => {
@@ -32,7 +34,7 @@ export default function ResumePreview({
             <div className={styles.background} style={{ width: '210mm' }} ref={documentRef}>
                 <header className={styles.header}>
                     <h1 className={styles.headerTitle}>
-                        {name} ({title})
+                        {name} {title ? `(${title})` : null}
                     </h1>
                     <div className={styles.headerContent}>
                         <section className={styles.headerPersonalInfoContainer}>
@@ -63,6 +65,12 @@ export default function ResumePreview({
                     </div>
                 </header>
 
+                {aboutTitle && (
+                    <section>
+                        <h1>{aboutTitle}</h1>
+                        <div dangerouslySetInnerHTML={{ __html: aboutContent }} />
+                    </section>
+                )}
                 <div className={styles.skillsContainer}>
                     <h1>Skills</h1>
                     <ul>

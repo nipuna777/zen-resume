@@ -32,19 +32,20 @@ export default function Resume() {
     const { control, register, watch, setValue } = useForm<any>({
         defaultValues: {
             name: 'Foo Bar',
-            title: 'Software Engineer',
             telephone: '+12345678',
             email: 'foo.bar@email.com',
             address: '',
             imageId: placeHolderImageId,
             value: '',
+            about: {
+                title: 'Objectives',
+            },
         },
     });
     const [isLoading, setIsLoading] = useState(false);
     const [styles, setStyles] = useState(defaultTheme);
 
     const documentRef = useRef(null);
-    const fieldValues = watch();
 
     const fetchResume = async (authUser) => {
         setIsLoading(true);
@@ -70,7 +71,21 @@ export default function Resume() {
         }
     }, [authUser]);
 
-    const { name, title, telephone, email, address, imageId, sections, bioSections, skills } = fieldValues;
+    const fieldValues = watch();
+    console.log(fieldValues);
+    const {
+        name,
+        title,
+        telephone,
+        email,
+        address,
+        imageId,
+        sections,
+        bioSections,
+        skills,
+        aboutTitle,
+        aboutContent,
+    } = fieldValues;
     return (
         <div className="flex flex-row flex-grow overflow overflow-hidden">
             {isLoading && (
@@ -104,6 +119,8 @@ export default function Resume() {
                     imageId={imageId}
                     skills={skills}
                     styles={styles}
+                    aboutTitle={aboutTitle}
+                    aboutContent={aboutContent}
                 />
             )}
         </div>
@@ -233,6 +250,10 @@ function ResumeEditor({
                 <TextInput label="Email" inputRef={register} name="email" />
                 <TextInput label="Telephone" inputRef={register} name="telephone" />
                 <TextAreaInput label="Address" inputRef={register} name="address" />
+
+                <h2>About / Objectives</h2>
+                <TextInput label="Title" inputRef={register} name="aboutTitle" />
+                <TextAreaInput label="Content" inputRef={register} name="aboutContent" />
 
                 <h2>Skills</h2>
                 {skillsFieldArray.fields.map((skill, index) => (
