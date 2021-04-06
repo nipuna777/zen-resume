@@ -1,6 +1,6 @@
 import { MouseEvent } from 'react';
 
-export default function Button({
+export function Button({
     onClick,
     children,
     className = '',

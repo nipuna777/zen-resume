@@ -5,7 +5,7 @@ if (typeof window !== 'undefined') {
     ReactQuill = require('react-quill');
 }
 
-export default function QuillControl({
+export function QuillControl({
     defaultValue,
     control,
     name,

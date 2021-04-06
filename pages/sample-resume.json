@@ -1,62 +1,84 @@
 {
-    "name": "Sachini Thilakarathna",
-    "imageId": "tfmmlbbj4mgrns1njc1c",
-    "email": "sachi.achela@gmail.com",
-    "address": "29/A, Wewalwala Road,\nBataganwilla\nGalle",
-    "telephone": " +94774637107",
-    "aboutTitle": "Objective & Career Goals",
-    "aboutContent": "<p>To excel as a professional, in the elds of Accountancy and financial management while delivering best service possible in achieving organizational objectives.</p>",
+    "bioData": {
+        "firstName": "Foo",
+        "lastName": "Bar",
+        "imageUrl": "example.com/image1"
+    },
+    "contactInfo": [
+        { "type": "EMAIL", "content": "foo.bar@gmail.com" },
+        { "type": "ADDRESS", "content": "123/A, Main Road,\nGalle" },
+        { "type": "TELEPHONE", "content": "+123456789" }
+    ],
+    "about": {
+        "title": "Objective & Career Goals",
+        "content": "<p>To excel as a professional, in the elds of Accountancy and financial management while delivering best service possible in achieving organizational objectives.</p>"
+    },
     "sections": [
         {
-            "subtitle": "G.C.E A/Ls",
-            "duration": "August 2013",
-            "type": "Education",
-            "title": "Sanghamitta Balika Vidyalaya",
-            "content": "Accounting Passed A/Ls with <strong>3As</strong> Index: 7756879<ul><li>Accounting: A</li><li>Business Studies: A</li><li>Economics: A</li></ul>"
+            "type": "TIMELINE",
+            "title": "Education",
+            "subSections": [
+                {
+                    "title": "KPMG Sri Lanka",
+                    "subTitle": "Associate One",
+                    "content": "<p>I was primarily responsible for performing the statutory financial audits in accordance with SLFRS &amp; LKAS. Also evaluated internal control systems of clients and provide recommendations for critical parameters.</p><p>At the book keeping, planned and evaluated all accounting procedures including payables, receivables monthly reconciliations, analysis of the general ledger accounts. </p>",
+                    "start": "2015-04-30T16:00:00.000Z",
+                    "end": "2017-04-30T16:00:00.000Z"
+                },
+                {
+                    "title": "KPMG Sri Lanka",
+                    "subTitle": "Associate One",
+                    "content": "<p>I was primarily responsible for performing the statutory financial audits in accordance with SLFRS &amp; LKAS. Also evaluated internal control systems of clients and provide recommendations for critical parameters.</p><p>At the book keeping, planned and evaluated all accounting procedures including payables, receivables monthly reconciliations, analysis of the general ledger accounts. </p>",
+                    "start": "2015-04-30T16:00:00.000Z",
+                    "end": "2017-04-30T16:00:00.000Z"
+                }
+            ]
         },
         {
-            "duration": "April 2015",
-            "type": "Education",
-            "subtitle": "Undergraduate",
-            "content": "<p>Bachelor of Entrepreneurship and Management(Specialized in Accountancy & Human Resource Management) degree with a <strong>GPA of 3.46(2nd upper class)</strong></p>",
-            "title": "University of Uva Wellassa"
+            "type": "TIMELINE",
+            "title": "Work",
+            "subSections": [
+                {
+                    "title": "KPMG Sri Lanka",
+                    "subTitle": "Associate One",
+                    "content": "<p>I was primarily responsible for performing the statutory financial audits in accordance with SLFRS &amp; LKAS. Also evaluated internal control systems of clients and provide recommendations for critical parameters.</p><p>At the book keeping, planned and evaluated all accounting procedures including payables, receivables monthly reconciliations, analysis of the general ledger accounts. </p>",
+                    "start": "2015-04-30T16:00:00.000Z",
+                    "end": "2017-04-30T16:00:00.000Z"
+                },
+                {
+                    "title": "KPMG Sri Lanka",
+                    "subTitle": "Associate One",
+                    "content": "<p>I was primarily responsible for performing the statutory financial audits in accordance with SLFRS &amp; LKAS. Also evaluated internal control systems of clients and provide recommendations for critical parameters.</p><p>At the book keeping, planned and evaluated all accounting procedures including payables, receivables monthly reconciliations, analysis of the general ledger accounts. </p>",
+                    "start": "2015-04-30T16:00:00.000Z",
+                    "end": "2017-04-30T16:00:00.000Z"
+                }
+            ]
         },
         {
-            "title": "KPMG Sri Lanka",
-            "duration": "August 2019 to Present",
-            "subtitle": "Associate One",
-            "content": "<p>I was primarily responsible for performing the statutory financial audits in accordance with SLFRS &amp; LKAS. Also evaluated internal control systems of clients and provide recommendations for critical parameters.</p><p>At the book keeping, planned and evaluated all accounting procedures including payables, receivables monthly reconciliations, analysis of the general ledger accounts. </p>",
-            "type": "Work Experience"
-        },
-
-        {
-            "title": "Polytex Garments (pvt) Ltd, EPZ Koggala",
-            "duration": "October 2018 to March 2019",
-            "subtitle": "Intern",
-            "content": "<p>Worked as an Intern, covering various HR functions including recruitment, payroll, EPF and ETF beneits.</p><p>Handling HRIS</p><p>Conducting a project which measures and attempts to control the absenteeism and turnover of trained machine operators.</p>",
-            "type": "Work Experience"
+            "type": "SIMPLE",
+            "title": "Skills",
+            "content": "<ul><li>Good interpersonal skills</li> <li>Competent communication skills both in Sinhalese and English.</li></ul>"
         },
         {
-            "content": "<h3>Projects</h3><ul><li>Created a GTFS-RT Validator as part of Google Summer of Code 2015 - Built a validator for General Transit Feed Real-Time Specifications</li><li>Developed Train Tracking application as part of 3rd Year Project</li><li>Developed a Customer Information System as the PGD project for BCS using the C# Language and the .Net framework</li></ul><h3>Competitions</h3><ul><li>Second runners-up of TadHack 2017</li><li>Winners of HackaDev 2015</li><li>LAN Hack 2015 Top 5 Teams</li></ul>",
-            "type": "Achievements",
-            "controlType": "simple"
-        }
-    ],
-    "skills": [
-        {
-            "content": "<p>Good interpersonal skills</p>"
+            "type": "SIMPLE",
+            "title": "Skills",
+            "content": "<ul><li>Good interpersonal skills</li> <li>Competent communication skills both in Sinhalese and English.</li></ul>"
         },
         {
-            "content": "<p>Competent communication skills both in Sinhalese and English. </p>"
+            "type": "MULTI_COLUMN",
+            "title": "References",
+            "content": ["<p>Dr.(Mrs.) Jayaranjani Sutha</p>", "<p>Dr.(Mrs.) Jayaranjani Sutha</p>"]
         },
         {
-            "content": "<p>Fast learner.</p>"
+            "type": "SIMPLE",
+            "content": "I certify that the information given above are true and correct. I am aware that misappropriation and / or submitting of false information, or willful suppression of any material fact, renders my application invalid.",
+            "decorations": false
         },
         {
-            "content": "<p>Reliable team player.</p>"
-        },
-        {
-            "content": "<p>Competent in Microsoft office packages.</p>"
+            "type": "MULTI_COLUMN",
+            "title": "References",
+            "content": ["Date", "Signature of Applicant"],
+            "decorations": false
         }
     ]
 }

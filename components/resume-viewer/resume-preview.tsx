@@ -1,6 +1,6 @@
 import { Image, Transformation } from 'cloudinary-react';
 import React, { Fragment } from 'react';
-import { controlTypes } from '../pages/resume';
+import { controlTypes } from '../resume-editor/resume-editor';
 
 export default function ResumePreview({
     documentRef,
@@ -10,25 +10,12 @@ export default function ResumePreview({
     telephone,
     sections,
     bioSections,
-    skills,
     imageId,
     name,
     styles,
     aboutTitle,
     aboutContent,
 }) {
-    const sectionsByTypeMap = new Map();
-    sections?.forEach((section) => {
-        if (sectionsByTypeMap.has(section.type)) {
-            const current = sectionsByTypeMap.get(section.type);
-            sectionsByTypeMap.set(section.type, [section, ...current]);
-        } else {
-            sectionsByTypeMap.set(section.type, [section]);
-        }
-    });
-
-    const sectionsByTypeArray = Array.from(sectionsByTypeMap);
-
     return (
         <div className={styles.container}>
             <div className={styles.background} style={{ width: '210mm' }} ref={documentRef}>
@@ -71,16 +58,8 @@ export default function ResumePreview({
                         <div dangerouslySetInnerHTML={{ __html: aboutContent }} />
                     </section>
                 )}
-                <div className={styles.skillsContainer}>
-                    <h1>Skills</h1>
-                    <ul>
-                        {skills?.map((skill, i) => (
-                            <li key={i} dangerouslySetInnerHTML={{ __html: skill.content }} />
-                        ))}
-                    </ul>
-                </div>
 
-                {sectionsByTypeArray.map((sections, i) => {
+                {sections?.map((sections, i) => {
                     return (
                         <Fragment key={i}>
                             <h1>{sections[0]}</h1>

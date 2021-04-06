@@ -1,12 +1,11 @@
-import TextInput from '../components/text-input';
-import QuillControl from './quill-control';
+import { QuillControl, TextInput } from '../controls';
 
 let ReactQuill;
 if (typeof window !== 'undefined') {
     ReactQuill = require('react-quill');
 }
 
-export default function SectionEditor({ section, control, register, index }) {
+export function SimpleSectionEditor({ section, control, register, index }) {
     return (
         <>
             <hr />
